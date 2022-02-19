@@ -18,7 +18,7 @@ import random
 
 def goto_page(Chrome_driver, link, size, get_size_mode):
     Chrome_driver.get(link)
-    sleep(2)
+    sleep(1)
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
@@ -30,17 +30,17 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
 
         action = ActionChains(Chrome_driver)
         #==========================사이즈를 계속 선택해줘야하기 때문에 100번 반복==================
-        for i in 100:
+        for i in range(100):
             #======================5번 째 시도마다 한 번씩 새로고침=================
             if((i % 5 == 0) & (i != 0)):
                 Chrome_driver.get(link)
                 sleep(1)
-            sleep(1.5)
+            # sleep(1.5)
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             if(get_size_mode == "select_size"):
                 size_element = WebDriverWait(Chrome_driver, 3).until(EC.element_to_be_clickable((By.XPATH,\
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
-                sleep(1)
+                # sleep(1)
                 action.move_to_element(size_element).click().perform()
 
                 sleep(0.1)
@@ -86,14 +86,15 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 sleep(1)
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
-        for i in 100:
+        for i in range(100):
             if((i % 5 == 0) & (i != 0)):
                 Chrome_driver.get(link)
-            sleep(1.5)
+                sleep(1)
+            # sleep(1.5)
             if(get_size_mode == "select_size"):
                 size_list = WebDriverWait(Chrome_driver, 3).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
-                sleep(1)
+                # sleep(1)
 
                 action.move_to_element(size_list).click().perform()
                 
@@ -104,7 +105,11 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
                 sleep(0.5)
-                temp_element = WebDriverWait(Chrome_driver, 3).until(EC.presence_of_element_located((By.XPATH,\
+                try: 
+                    temp_element = WebDriverWait(Chrome_driver, 3).until(EC.presence_of_element_located((By.XPATH,\
+                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
+                except:
+                    temp_element = WebDriverWait(Chrome_driver, 3).until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
                 action.move_to_element(temp_element).click().perform()
                 

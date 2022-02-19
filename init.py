@@ -1,34 +1,32 @@
-
 from selenium import webdriver
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities 
-from selenium.webdriver.support.ui import WebDriverWait as wait 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
-from selenium.common.exceptions import TimeoutException
 
 
 
 import os
-import pandas as pd
+import chromedriver_autoinstaller
 from time import sleep
 import subprocess
+import pandas as pd
 from concurrent import futures
-import chromedriver_autoinstaller
 
 from check_login import check_logged_in
 from check_time import check_time
 from choose_address_payment import choose_address, choose_payment
 from choose_size import goto_page
 
+
 user_info = pd.read_csv('./info.csv')
 #몇 개의 계정을 돌릴건지 확인 -> 쓰레드 갯수 때문에 필요함
 user_num = len(user_info)
 
+input_hour = input("set hour: ")
+input_min = input("set min: ")
 
 def init(user_num):
     #--------------------------아이디 패스워드 프록시 설정--------------------------
@@ -42,16 +40,19 @@ def init(user_num):
     #------------크롬 버전 확인 및 각 사용자별 exe파일 경로 및 쿠키 경로------------
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
     chrome_exe_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+#     chrome_exe_path = str(os.path.abspath(os.getcwd()))
+#     chrome_exe_path = chrome_exe_path.replace('\개발용dir','')
+#     chrome_exe_path = chrome_exe_path + "\\" +str(user_num)  + '\Chrome\Application\chrome.exe'
 
     chrome_cookie_path = str(os.path.abspath(os.getcwd()))
     chrome_cookie_path = chrome_cookie_path.replace('\개발용dir','')
     chrome_cookie_path = chrome_cookie_path + "\\" +str(user_num) + '\Chrome_cookie'
 
-    # chrome_driver_path = str(os.path.abspath(os.getcwd()))
-    # chrome_driver_path = chrome_driver_path.replace('\개발용dir','')
-    # chrome_driver_path = chrome_driver_path + "\\" +str(user_num) + '\\' + chrome_ver + '\chromedriver.exe'
+    chrome_driver_path = str(os.path.abspath(os.getcwd()))
+    chrome_driver_path = chrome_driver_path.replace('\개발용dir','')
+    chrome_driver_path = chrome_driver_path + "\\" +str(user_num) + '\\' + chrome_ver + '\chromedriver.exe'
+    #------------크롬 버전 확인 및 각 사용자별 exe파일 경로 및 쿠키 경로------------
     
-    chrome_driver_path = '.\\' + chrome_ver + '\\chromedriver.exe'
     port_num = 9222 + user_num
     
     #------------------------자동 제어모드 우회------------------------------
@@ -94,28 +95,23 @@ def init(user_num):
     except:
         pass
     
-    sleep(3)
     sleep(4)
     check_logged_in(driver,ID, PW, user_num)
     sleep(5)
     
 
-    input_hour = "10" 
-    input_min = "00"
-    input_med = "AM"
-
     if(input_hour != "0" or input_min != "0"):
-    # 로그인 되고 나서 타임 트리거 걸어 줌
-        while True:
-            if check_time(input_hour, input_min, input_med):
-                print("start")
-                sleep(0.8)
-                break
+        # 로그인 되고 나서 타임 트리거 걸어 줌
+            while True:
+                if check_time(input_hour, input_min):
+                    print("start")
+                    sleep(0.8)
+                    break
 
 
     #임시
-    sleep(1)
-    #임시
+#     sleep(1)
+#     #임시
 
     job_condition = "choose_size"
     for i in range(5):
@@ -140,7 +136,7 @@ def init(user_num):
                 action = ActionChains(driver)
                 submit_btn =  WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]/div/div/div[2]/button')))
                 action.move_to_element(submit_btn).click().perform()
-                # 
+                
     
 def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     #사이즈 고른 후 주소 선택 화면을 넘어가지 않을 시 5번 시도 (더 많이 하면 no access 뜸)
