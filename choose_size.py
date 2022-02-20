@@ -108,7 +108,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     action.move_to_element(size_element).click().perform()
 
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-                sleep(0.5)
+                # sleep(0.5)
                 try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
                     temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
@@ -142,7 +142,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     action.move_to_element(size_element).click().perform()
 
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-                sleep(0.5)
+                # sleep(0.5)
                 try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
                     temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))

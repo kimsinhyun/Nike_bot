@@ -29,20 +29,26 @@ def choose_address(Chrome_driver):
 
 def choose_payment(Chrome_driver):
     while 1:
-        action = ActionChains(Chrome_driver)
-        sleep(0.7)
-        #-----------------------------------결제 방식 클릭(아직은 카카오페이만 구현되어 있음(추후에 추가 예정)-------------------------------------------
-        payment = WebDriverWait(Chrome_driver,2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
-        action.move_to_element(payment).click().perform()
-        sleep(0.05)
+        try:
+            action = ActionChains(Chrome_driver)
+            sleep(0.7)
+            #-----------------------------------결제 방식 클릭(아직은 카카오페이만 구현되어 있음(추후에 추가 예정)-------------------------------------------
+            payment = WebDriverWait(Chrome_driver,2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
+            action.move_to_element(payment).click().perform()
+            sleep(0.05)
 
-        #------------------------------------구매 동의 체크 박스-----------------------------------
-        terms_of_conditions = WebDriverWait(Chrome_driver,2).until(EC.presence_of_element_located((By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')))
-        action.move_to_element(terms_of_conditions).click().perform()
-        
-        #----------------------------------------------결제하기 버튼----------------------------------------------
-        sleep(1.5)
-        complete_purchase = WebDriverWait(Chrome_driver,2).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="complete_checkout"]/button')))
-        action.move_to_element(complete_purchase).click().perform()
+            #------------------------------------구매 동의 체크 박스-----------------------------------
+            terms_of_conditions = WebDriverWait(Chrome_driver,2).until(EC.presence_of_element_located((By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')))
+            action.move_to_element(terms_of_conditions).click().perform()
+            
+            #----------------------------------------------결제하기 버튼----------------------------------------------
+            sleep(1.5)
+            complete_purchase = WebDriverWait(Chrome_driver,2).until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
+            action.move_to_element(complete_purchase).click().perform()
+            break
+        except:
+            Chrome_driver.refresh()
+            sleep(1)
+            continue
         
         
