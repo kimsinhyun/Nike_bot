@@ -9,7 +9,7 @@ from time import sleep
 
 def choose_address(Chrome_driver):
     action = ActionChains(Chrome_driver)
-    sleep(1)
+    # sleep(1)
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     #--------------------------------------굳이 클릭하지 않아도 잘 동작하기 때문에 시간 절약을 위애 주석처리------------
     #--------------------------------------필요할 경우 주석 해제------------------------------------------------------
@@ -24,8 +24,6 @@ def choose_address(Chrome_driver):
     #         if(Chrome_driver.page_source.find("input-checkbox checked") != -1):
     #             break
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
-    
-
     next_stage = WebDriverWait(Chrome_driver,3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-next"]')))
     action.move_to_element(next_stage).click().perform()
 

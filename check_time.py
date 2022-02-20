@@ -6,7 +6,7 @@ def check_time(hour, minute):
     url = 'https://www.naver.com/'
     date = urllib.request.urlopen(url).headers['Date'][5:-4]
     nav_hour, nav_min, nav_sec =  date[12:14], date[15:17], date[18:]
-    nav_hour = str((int(nav_hour)+ 9)%12)
+    nav_hour = str((int(nav_hour)+ 9))
 
     nav_hour = int(nav_hour)
     nav_min = int(nav_min)

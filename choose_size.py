@@ -83,13 +83,13 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
         for i in range(10): 
             if(Chrome_driver.page_source.find("사이즈 선택") == -1): 
                 Chrome_driver.get(link)
-                sleep(1)
+                sleep(2)
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
         for i in range(100):
-            if((i % 5 == 0) & (i != 0)):
+            if((i % 3 == 0) & (i != 0)):
                 Chrome_driver.get(link)
-                sleep(1)
+                sleep(2)
             # sleep(1.5)
             if(get_size_mode == "select_size"):
                 size_list = WebDriverWait(Chrome_driver, 3).until(EC.presence_of_element_located((By.XPATH, \
@@ -128,7 +128,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]')
                 random_size = random.randint(0,len(size_elements))
                 print("(launch)random_size: ", random_size)
-                sleep(0.1)
+                # sleep(0.1)
                 size_element = size_elements[random_size]
                 action.move_to_element(size_element).click().perform()
                 
