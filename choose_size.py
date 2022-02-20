@@ -104,7 +104,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     action.move_to_element(size_element).click().perform()
                 except:
                     action.move_to_element(size_list).click().perform()
-                    sleep(0.5)
+                    sleep(0.3)
                     action.move_to_element(size_element).click().perform()
 
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================

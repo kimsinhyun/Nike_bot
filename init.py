@@ -164,6 +164,7 @@ def second_step(driver,job_condition="choose address"):
 def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
     for i in range(10):
         try:
+            print("start third step")
             choose_payment(driver)
         except:
             goto_page(driver,LINK,SIZE,"random_size")
@@ -171,6 +172,7 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
         
         #만약 no-access로 넘어가게 되면 다시 size 선택
         if(driver.current_url.find('no-access') != -1):
+            print('here!!!')
             return "choose_size"
         else:
             # 1. 주문 생성 오류 감지 시
@@ -180,14 +182,15 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
                 continue
 
             # ------지금 이부분이 제대로 동작이 안되서 우선 뺏음 있으면 더 좋은데 없어도 잘 될 듯--------
-            # # 2-1. 만약 QR코드가 제대로 떴을 경우
+            # 2-1. 만약 QR코드가 제대로 떴을 경우
             # sleep(10) 
             # if(driver.page_source.find("스캔하면") != -1):
             #     print(user_num, "th user success!")
-            #     return "finish"
-            # # 2-2. 만약 제대로 뜨지 않았을 경우
-            # else:
-            #     return "choose_size"
+                # return "finish"
+            # 2-2. 만약 제대로 뜨지 않았을 경우
+            else:
+                print('here')
+                return "finish"
 
 
 # 멀티 쓰레딩
