@@ -40,17 +40,15 @@ def init(user_num):
     #------------크롬 버전 확인 및 각 사용자별 exe파일 경로 및 쿠키 경로------------
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
     chrome_exe_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-#     chrome_exe_path = str(os.path.abspath(os.getcwd()))
-#     chrome_exe_path = chrome_exe_path.replace('\개발용dir','')
-#     chrome_exe_path = chrome_exe_path + "\\" +str(user_num)  + '\Chrome\Application\chrome.exe'
 
     chrome_cookie_path = str(os.path.abspath(os.getcwd()))
     chrome_cookie_path = chrome_cookie_path.replace('\개발용dir','')
     chrome_cookie_path = chrome_cookie_path + "\\" +str(user_num) + '\Chrome_cookie'
 
-    chrome_driver_path = str(os.path.abspath(os.getcwd()))
-    chrome_driver_path = chrome_driver_path.replace('\개발용dir','')
-    chrome_driver_path = chrome_driver_path + "\\" +str(user_num) + '\\' + chrome_ver + '\chromedriver.exe'
+    # chrome_driver_path = str(os.path.abspath(os.getcwd()))
+    # # chrome_driver_path = chrome_driver_path.replace('\개발용dir','')
+    # chrome_driver_path = chrome_driver_path + "\\" +str(user_num) + '\\' + chrome_ver + '\chromedriver.exe'
+    chrome_driver_path = '.\\' + chrome_ver + '\\chromedriver.exe'
     #------------크롬 버전 확인 및 각 사용자별 exe파일 경로 및 쿠키 경로------------
     
     port_num = 9222 + user_num

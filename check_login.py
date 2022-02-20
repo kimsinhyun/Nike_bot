@@ -20,7 +20,7 @@ import pyperclip
 #3. 지금은 당장 급한게 아니니까 로그인 정도는 수동으로 한 번만 해놓으면 앞으로 실행할 때마다 쿠키 파일이 설정되어 있어서 알아서 로그인 되어 있기 떄문에 문제 없음 (추후에 수정 요청 시 추가 삽가능합니다!)
 
 def check_logged_in(Chrome_driver,user_ID,user_PW, user_num):
-    sleep(int(user_num) * 4)
+    sleep(int(user_num) * 7)
     try:
         action = ActionChains(Chrome_driver)
         login_btn = WebDriverWait(Chrome_driver,5).until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
