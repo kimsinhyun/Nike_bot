@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import os
 import chromedriver_autoinstaller
@@ -10,7 +12,7 @@ import subprocess
 import pandas as pd
 from concurrent import futures
 
-from check_login import check_logged_in
+from check_login import check_logged_in, login
 from check_time import check_time
 from choose_address_payment import choose_address, choose_payment
 from choose_size import goto_page
@@ -82,10 +84,12 @@ def init(user_num):
     
     driver.implicitly_wait(2)  
     driver.get("https://www.nike.com/kr/ko_kr/")
-    # driver.maximize_window()
+    driver.maximize_window()
     
     sleep(4)
-    check_logged_in(driver,ID, PW, user_num)
+    if(check_logged_in(driver, user_num) == False):
+        login(driver, ID, PW, user_num)
+
     sleep(5)
 
 
@@ -112,17 +116,8 @@ def init(user_num):
             job_condition = second_step(driver,job_condition)
 
         if(job_condition=="choose_payment"):
-            job_condition = thrid_step(driver,job_condition)
-            # choose_payment(driver)
-            # #주문 생성 오류 감지
-            # sleep(2)
-            # #1. 오류 없이 결제 창이 잘 떴을 경우
-            # if(driver.page_source.find("오류가") == -1):
-            #     break
-            # else:
-            #     action = ActionChains(driver)
-            #     submit_btn =  WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]/div/div/div[2]/button')))
-            #     action.move_to_element(submit_btn).click().perform()
+            job_condition = thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition)
+
         if(job_condition == "finish"):
             break
                 
@@ -166,23 +161,33 @@ def second_step(driver,job_condition="choose address"):
                 sleep(2)
                 continue
 
-def thrid_step(driver,job_condition="choose_payment"):
+def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
     for i in range(10):
-        choose_payment(driver)
-        #주문 생성 오류 감지
+        try:
+            choose_payment(driver)
+        except:
+            goto_page(driver,LINK,SIZE,"random_size")
         sleep(2)
+        
         #만약 no-access로 넘어가게 되면 다시 size 선택
         if(driver.current_url.find('no-access') != -1):
             return "choose_size"
         else:
-            #만약 QR코드가 제대로 떴을 경우 
-            try:
-                driver.find_element(By.XPATH,'//*[@id="img_qr"]/img')!= 0
-                return "finish"
-            #만약 제대로 뜨지 않았을 경우
-            except:
+            # 1. 주문 생성 오류 감지 시
+            if(driver.page_source.find("생성 오류") != -1):
                 driver.refresh()
                 sleep(2)
+                continue
+
+            # ------지금 이부분이 제대로 동작이 안되서 우선 뺏음 있으면 더 좋은데 없어도 잘 될 듯--------
+            # # 2-1. 만약 QR코드가 제대로 떴을 경우
+            # sleep(10) 
+            # if(driver.page_source.find("스캔하면") != -1):
+            #     print(user_num, "th user success!")
+            #     return "finish"
+            # # 2-2. 만약 제대로 뜨지 않았을 경우
+            # else:
+            #     return "choose_size"
 
 
 # 멀티 쓰레딩
