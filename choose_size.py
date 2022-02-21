@@ -131,7 +131,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 sleep(0.5)
                 size_elements = Chrome_driver.find_elements(By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]')
-                random_size = random.randint(0,len(size_elements))
+                random_size = random.randint(0,len(size_elements)-1)
                 print("(launch)random_size: ", random_size)
                 size_element = size_elements[random_size]
                 try:

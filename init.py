@@ -108,7 +108,10 @@ def init(user_num):
     for i in range(10):
         if(job_condition=="choose_size"):
             #첫 시도는 희망하는 사이즈로 선택
-            get_size_mode = "select_size"
+            if(i == 0):
+                get_size_mode = "select_size"
+            else:
+                get_size_mode = "random_size"
             #first_step -> 사이즈 서택 페이지, 성공하면 choose_address를 return 받아서 다음 스텝으로 넘어간다.
             job_condition = first_step(driver, LINK, SIZE, get_size_mode, job_condition)
 
@@ -177,15 +180,18 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
         else:
             # 1. 주문 생성 오류 감지 시
             if(driver.page_source.find("생성 오류") != -1):
+                print("생성 오류")
                 driver.refresh()
                 sleep(2)
                 continue
 
             try:
-                qr_code = WebDriverWait(driver,5).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="img_qr"]/img')))
+                qr_code = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
+                print(user_num, "th 아이디 성공!")
                 return "finish"
             except:
-                return "choose_payment"
+                print("여기")
+                return "finish"
 
             
             # ------지금 이부분이 제대로 동작이 안되서 우선 뺏음 있으면 더 좋은데 없어도 잘 될 듯--------

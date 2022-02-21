@@ -12,11 +12,9 @@ import pyperclip
 def check_logged_in(Chrome_driver, user_num):
     try:
         login_btn = WebDriverWait(Chrome_driver,3).until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
-        print("false")
         return False
     except TimeoutException:
         print(str(user_num) + '번 째 아이디는 이미 로그인 되어 있습니다')
-        print("True")
         return True
 
 #1. 클립보드를 사용하는 방식이기 때문에 csv에 적어놨던 로그인 정보대로가 아닌 여러 창들이 한 아이디로 로그인 될 확률이 높음
