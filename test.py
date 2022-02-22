@@ -26,11 +26,11 @@ chrome_cookie_path = chrome_cookie_path.replace('\개발용dir','')
 chrome_cookie_path = chrome_cookie_path + "\\" +str(user_num) + '\Chrome_cookie'
 #기본 설정
 
-chrome_exe_path = "0\Chrome\Application\chrome.exe"
+chrome_exe_path = "0\Chrome\Application\chrome_proxy.exe"
 chrome_driver_path = '.\\' + "98" + '\\chromedriver.exe'
-subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=str(64668)))
+subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=str(58758)))
 
-proxy = {'address': '209.61.207.249:64668',
+proxy = {'address': '209.61.207.133:58758',
      'username': 'run',
      'password': 'rKeLShPi'}
 
@@ -47,8 +47,7 @@ capabilities['proxy'] = {'proxyType': 'MANUAL',
 
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
-options.add_experimental_option("debuggerAddress", f"209.61.207.249:64668")
-options.add_argument('--blink-settings=imagesEnabled=false')
+options.add_experimental_option("debuggerAddress", f"209.61.207.133:58758")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
 # options.add_experimental_option("useAutomationExtension", False)
 # options.add_experimental_option("excludeSwitches",["enable-automation"])
@@ -77,4 +76,4 @@ sleep(5)
 sleep(50)
 # def goto_page(Chrome_driver, link, size, get_size_mode):
 
-# 209.61.207.249:64668:run:rKeLShPi
+# 209.61.207.133:58758:run:rKeLShPi

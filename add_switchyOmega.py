@@ -75,45 +75,45 @@ def add_switchOmega(user_num):
 
 
 
-     # driver.get('chrome-extension://padekgcemlokbadohgkifijomclgjgif/options.html#!/profile/1')
-     # driver.maximize_window()
+     driver.get('chrome-extension://padekgcemlokbadohgkifijomclgjgif/options.html#!/profile/1')
+     driver.maximize_window()
 
-     # profile1_proxy_ip =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[3]/input')))
-     # profile1_proxy_port =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[4]/input')))
-     # profile_id_pw_ptn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[5]/button/span')))
+     profile1_proxy_ip =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[3]/input')))
+     profile1_proxy_port =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[4]/input')))
+     profile_id_pw_ptn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[5]/button/span')))
 
      
-     # profile1_proxy_ip.clear()
-     # profile1_proxy_ip.send_keys(proxy_ip)
-     # sleep(1)
-     # profile1_proxy_port.clear()
-     # profile1_proxy_port.send_keys(proxy_port)
-     # sleep(10)
-     # profile_id_pw_ptn.click()
-     # sleep(1)
+     profile1_proxy_ip.clear()
+     profile1_proxy_ip.send_keys(proxy_ip)
+     sleep(1)
+     profile1_proxy_port.clear()
+     profile1_proxy_port.send_keys(proxy_port)
+     sleep(10)
+     profile_id_pw_ptn.click()
+     sleep(1)
 
-     # profile_id =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[2]/div/div/input')))
-     # profile_pw =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[3]/div/input[1]')))
-     # submit_proxy_btn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[3]/button[2]')))
-     # apply_change_btn=  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, ' /html/body/div[1]/header/nav/li[13]/a')))
+     profile_id =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[2]/div/div/input')))
+     profile_pw =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[3]/div/input[1]')))
+     submit_proxy_btn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[3]/button[2]')))
+     apply_change_btn=  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, ' /html/body/div[1]/header/nav/li[13]/a')))
 
-     # profile_id.clear()
-     # profile_id.send_keys(proxy_user)
-     # sleep(1)
-     # profile_pw.clear()
-     # profile_pw.send_keys(proxy_pw)
-     # sleep(1)
-     # submit_proxy_btn.click()
-     # sleep(1)
-     # apply_change_btn.click()
+     profile_id.clear()
+     profile_id.send_keys(proxy_user)
+     sleep(1)
+     profile_pw.clear()
+     profile_pw.send_keys(proxy_pw)
+     sleep(1)
+     submit_proxy_btn.click()
+     sleep(1)
+     apply_change_btn.click()
      sleep(1)
 
      driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
 
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-#     future_test_results = [ executor.submit(add_switchOmega, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    future_test_results = [ executor.submit(add_switchOmega, 0) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(add_switchOmega, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(add_switchOmega, 0) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
             test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
