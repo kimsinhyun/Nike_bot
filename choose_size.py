@@ -41,11 +41,13 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             if(get_size_mode == "select_size"):
                 # try:
-                size_element = WebDriverWait(Chrome_driver, 10,0.25).until(EC.element_to_be_clickable((By.XPATH,\
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/*[text() = "255"]')))
+                sleep(5)
+                size_element = WebDriverWait(Chrome_driver, 3,0.5).until(EC.element_to_be_clickable((By.XPATH,\
+                    # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
+                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[2]/div/span[@typename="255"]')))
                 action.move_to_element(size_element).click().perform()
 
-                purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))  
                 action.move_to_element(purchase_btn).click().perform()
                 # break
                 # except:
