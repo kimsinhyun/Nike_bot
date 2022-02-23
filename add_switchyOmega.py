@@ -81,39 +81,45 @@ def add_switchOmega(user_num):
 
     protocal_select =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[2]/select')))
     
-    profile1_proxy_ip =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[3]/input')))
-    profile1_proxy_port =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[4]/input')))
-    profile_id_pw_ptn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[5]/button/span')))
 
+    sleep(1)
     protocal_select.click()
     sleep(1)
 
-    protocal =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[2]/select/option[2]')))
+    protocal =  WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[2]/select/option[2]')))
     protocal.click()
     sleep(1)
 
+    profile1_proxy_ip =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH,   '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[3]/input')))
+    profile1_proxy_ip.click()
     profile1_proxy_ip.clear()
     profile1_proxy_ip.send_keys(proxy_ip)
     sleep(1)
+    profile1_proxy_port =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[4]/input')))
     profile1_proxy_port.clear()
     profile1_proxy_port.send_keys(proxy_port)
     sleep(1)
+    profile_id_pw_ptn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH,   '/html/body/div[1]/main/div[2]/div/section[1]/div/table/tbody[1]/tr[1]/td[5]/button/span')))
     profile_id_pw_ptn.click()
     sleep(1)
 
     profile_id =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[2]/div/div/input')))
-    profile_pw =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[3]/div/input[1]')))
-    submit_proxy_btn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[3]/button[2]')))
-    apply_change_btn=  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[13]/a')))
-
     profile_id.clear()
     profile_id.send_keys(proxy_user)
     sleep(1)
+    profile_pw =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[2]/div[3]/div/input[1]')))
     profile_pw.clear()
     profile_pw.send_keys(proxy_pw)
     sleep(1)
+    submit_proxy_btn =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[5]/div/div/form/div[3]/button[2]')))
     submit_proxy_btn.click()
     sleep(1)
+
+    try:
+        apply_change_btn=  WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[13]/a')))
+    except:
+        apply_change_btn=  WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[11]/a')))
+        
     apply_change_btn.click()
     sleep(1)
 
@@ -126,6 +132,11 @@ def add_switchOmega(user_num):
     default_profile =  WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/section[3]/div[1]/div/div/ul/li[2]/a')))
     default_profile.click()
     sleep(1)
+
+    try:
+        apply_change_btn=  WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[13]/a')))
+    except:
+        apply_change_btn=  WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[11]/a')))
     apply_change_btn.click()
 
     # sleep(1)
