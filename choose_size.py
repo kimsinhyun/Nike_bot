@@ -18,14 +18,15 @@ import random
 
 def goto_page(Chrome_driver, link, size, get_size_mode):
     Chrome_driver.get(link)
-    sleep(1)
+    wait = WebDriverWait(Chrome_driver, 5,0.5)
+    # sleep(1)
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
         for i in range(10): 
             if(Chrome_driver.page_source.find("사이즈 선택") == -1):
                 Chrome_driver.get(link)
-                sleep(1)
+                # sleep(1)
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
 
         action = ActionChains(Chrome_driver)
@@ -34,30 +35,27 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #======================5번 째 시도마다 한 번씩 새로고침=================
             if((i % 5 == 0) & (i != 0)):
                 Chrome_driver.get(link)
-                sleep(1)
+                # sleep(1)
             # sleep(1.5)
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             if(get_size_mode == "select_size"):
-                size_element = WebDriverWait(Chrome_driver, 1).until(EC.element_to_be_clickable((By.XPATH,\
+                size_element = wait.until(EC.element_to_be_clickable((By.XPATH,\
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
                 # sleep(1)
                 action.move_to_element(size_element).click().perform()
 
-                sleep(0.1)
-                purchase_btn =  WebDriverWait(Chrome_driver, 1).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))
+                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
-                sleep(0.2)
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
 
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
             elif(get_size_mode == "random_size"):
                 size_elements = Chrome_driver.find_elements(By.XPATH, \
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
-                random_size = random.randint(0,len(size_elements))
-                sleep(0.1)
+                random_size = random.randint(0,len(size_elements)-1)
                 size_element = size_elements[random_size]
                 action.move_to_element(size_element).click().perform()
-                purchase_btn =  WebDriverWait(Chrome_driver, 1).until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
                 sleep(0.2)
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
@@ -92,12 +90,12 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 sleep(2)
             # sleep(1.5)
             if(get_size_mode == "select_size"):
-                size_list = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH, \
+                size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
                 action.move_to_element(size_list).click().perform()
                 
                 sleep(0.5)
-                size_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
+                size_element = wait.until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[*]/a/span[text()=' + size  + ']')))
                 
                 try:
@@ -110,21 +108,21 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
                 # sleep(0.5)
                 try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
-                    temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
+                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
                 except:
-                    temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
+                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
                 action.move_to_element(temp_element).click().perform()
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
                 
                 sleep(0.2)
-                purchase_btn =  WebDriverWait(Chrome_driver, 1).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))
+                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
             
             #random으로 구매할 수 있는 사이즈를 선택
             elif(get_size_mode == "random_size"):
-                size_list = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH, \
+                size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
                 action.move_to_element(size_list).click().perform()
 
@@ -144,16 +142,16 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
                 # sleep(0.5)
                 try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
-                    temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
+                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
                 except:
-                    temp_element = WebDriverWait(Chrome_driver, 1).until(EC.presence_of_element_located((By.XPATH,\
+                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
                 action.move_to_element(temp_element).click().perform()
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
 
                 sleep(0.2)
-                purchase_btn = WebDriverWait(Chrome_driver, 1).until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                purchase_btn = wait.until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
             
             if(Chrome_driver.page_source.find("사이즈를 선택해 주세요") == -1):

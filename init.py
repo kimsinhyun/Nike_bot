@@ -89,30 +89,30 @@ def init(user_num):
         chromedriver_autoinstaller.install(True)  
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
-    driver.implicitly_wait(2)  
+    # driver.implicitly_wait(2)  
 
     driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
-    sleep(2)
+    sleep(1)
     driver.refresh()
-    sleep(10)
+    sleep(3)
 
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
     
-    sleep(4)
+    # sleep(4)
     if(check_logged_in(driver, user_num) == False):
         login(driver, ID, PW, user_num)
 
-    sleep(20)
+    sleep(3)
 
 
-    #타임 트리거 (예약 실행)
-    if(input_hour != "0" or input_min != "0"):
-        while True:
-            if check_time(input_hour, input_min):
-                print("start")
-                sleep(0.8)
-                break
+    # #타임 트리거 (예약 실행)
+    # if(input_hour != "0" or input_min != "0"):
+    #     while True:
+    #         if check_time(input_hour, input_min):
+    #             print("start")
+    #             sleep(0.8)
+    #             break
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -143,7 +143,7 @@ def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     for i in range(10):
         goto_page(driver,LINK,SIZE,get_size_mode)
         # 구매버튼 클릭 후 1.5초 정도 대기
-        sleep(2)
+        # sleep(2)
         #사이즈 선택 및 구매버튼 클릭 완료 후(여기 부분의 예외처리는 goto_page 안에 구현되어 있음)
         #배송지 선택 창으로 넘어가는지 확인
         #no-access 혹은 사이즈 선택 창에서 성공적으로 실행되지 않았다면 random_size 모드로 사이즈 선택 총 5번 실행
@@ -222,7 +222,8 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-    future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
             test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
