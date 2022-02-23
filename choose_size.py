@@ -19,7 +19,7 @@ import random
 
 def goto_page(Chrome_driver, link, size, get_size_mode):
     Chrome_driver.get(link)
-    wait = WebDriverWait(Chrome_driver, 10, 0.2)
+    wait = WebDriverWait(Chrome_driver, 20, 0.2)
     # sleep(1)
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
@@ -40,25 +40,24 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # sleep(1.5)
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             if(get_size_mode == "select_size"):
-                try:
-                    size_element = wait.until(EC.presence_of_element_located((By.XPATH,\
-                            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]/label[text()=' + size  + ']')))
-                    action.move_to_element(size_element).click().perform()
+                # try:
+                size_element = WebDriverWait(Chrome_driver, 10,0.25).until(EC.element_to_be_clickable((By.XPATH,\
+                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/*[text() = "255"]')))
+                action.move_to_element(size_element).click().perform()
 
-                    purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="btn-buy"]/span')))  
-                    action.move_to_element(purchase_btn).click().perform()
-                    break
-                except:
-                    sleep(2)
-                    size_elements = Chrome_driver.find_elements(By.XPATH, \
-                            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
-                    random_size = random.randint(0,len(size_elements)-1)
-                    size_element = size_elements[random_size]
-                    action.move_to_element(size_element).click().perform()
-                    purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
-                    action.move_to_element(purchase_btn).click().perform()
-                    get_size_mode = "random_size"
-                    break
+                purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                action.move_to_element(purchase_btn).click().perform()
+                # break
+                # except:
+                #     size_elements = Chrome_driver.find_elements(By.XPATH, \
+                #             '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
+                #     random_size = random.randint(0,len(size_elements)-1)
+                #     size_element = size_elements[random_size]
+                #     action.move_to_element(size_element).click().perform()
+                #     purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                #     action.move_to_element(purchase_btn).click().perform()
+                #     get_size_mode = "random_size"
+                #     break
                 # sleep(1)
                 
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================

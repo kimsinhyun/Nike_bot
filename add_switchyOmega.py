@@ -51,7 +51,7 @@ def add_switchOmega(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
+    process = subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
     capabilities = dict(DesiredCapabilities.CHROME)
     capabilities['proxy'] = {'proxyType': 'MANUAL',
@@ -142,7 +142,8 @@ def add_switchOmega(user_num):
     driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
     sleep(2)
     driver.refresh()
-
+    temp = input("enter any key to terminate: ")
+    process.kill()
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
     future_test_results = [ executor.submit(add_switchOmega, i) for i in range(2) ] # running same test 6 times, using test number as url

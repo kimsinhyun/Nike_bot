@@ -41,7 +41,7 @@ def init(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
+    process = subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
     capabilities = dict(DesiredCapabilities.CHROME)
     capabilities['proxy'] = {'proxyType': 'MANUAL',
@@ -80,6 +80,8 @@ def init(user_num):
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
     driver.get("https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en")
+    temp = input("enter any key to terminate: ")
+    process.kill()
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)

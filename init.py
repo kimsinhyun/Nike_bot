@@ -58,7 +58,7 @@ def init(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
+    process = subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
     capabilities = dict(DesiredCapabilities.CHROME) 
     capabilities['proxy'] = {'proxyType': 'MANUAL',
@@ -92,11 +92,15 @@ def init(user_num):
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
     # driver.implicitly_wait(2)  
-    
+    driver.get("https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=1&acr=1&acq=%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C&qdt=0&ie=utf8&query=%EB%82%B4+%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C+%ED%99%95%EC%9D%B8")
+    sleep(2)
+    driver.refresh()
+    sleep(5)
+
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
-    
-    sleep(4)
+    sleep(3)
+    # sleep(4)
     # if(check_logged_in(driver, user_num) == False):
     #     login(driver, ID, PW, user_num)
 
@@ -133,7 +137,9 @@ def init(user_num):
 
         if(job_condition == "finish"):
             break
-                
+
+    temp = input("enter any key to terminate: ")
+    process.kill()            
     
 def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     #사이즈 고른 후 주소 선택 화면을 넘어가지 않을 시 5번 시도 (더 많이 하면 no access 뜸)
