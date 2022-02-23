@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.chrome.options import Options
@@ -57,10 +58,9 @@ def init(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
-    # subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
+    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
-    capabilities = dict(DesiredCapabilities.CHROME)
+    capabilities = dict(DesiredCapabilities.CHROME) 
     capabilities['proxy'] = {'proxyType': 'MANUAL',
                             'httpProxy': proxy['address'],
                             'ftpProxy': proxy['address'],
@@ -71,10 +71,12 @@ def init(user_num):
                             'socksUsername': proxy['username'],
                             'socksPassword': proxy['password']}
 
+    capabilities["pageLoadStrategy"] = "none"
+
     options = webdriver.ChromeOptions()
     # options.add_argument("--start-maximized")
     options.add_experimental_option("debuggerAddress", f"127.0.0.1:{proxy_port}")
-    options.add_argument('--blink-settings=imagesEnabled=false')
+    # options.add_argument('--blink-settings=imagesEnabled=false')
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
     options.add_argument('--profile-directory=Profile 1')
 
@@ -90,29 +92,24 @@ def init(user_num):
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
     # driver.implicitly_wait(2)  
-
-    driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
-    sleep(1)
-    driver.refresh()
-    sleep(3)
-
+    
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
     
-    # sleep(4)
-    if(check_logged_in(driver, user_num) == False):
-        login(driver, ID, PW, user_num)
+    sleep(4)
+    # if(check_logged_in(driver, user_num) == False):
+    #     login(driver, ID, PW, user_num)
 
-    sleep(3)
+    # sleep(3)
 
 
     # #타임 트리거 (예약 실행)
-    if(input_hour != "0" or input_min != "0"):
-        while True:
-            if check_time(input_hour, input_min):
-                print("start")
-                sleep(0.8)
-                break
+    # if(input_hour != "0" or input_min != "0"):
+    #     while True:
+    #         if check_time(input_hour, input_min):
+    #             print("start")
+    #             sleep(0.8)
+    #             break
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -156,7 +153,7 @@ def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
 def second_step(driver,job_condition="choose address"):
     for i in range(10):
         choose_address(driver)
-        sleep(2)
+        # sleep(2)
         #배송지 선택 화면으로 넘어온 후 payment선택 화면으로 정상적으로 이동하지 못했을 시
         #1. no-access이면 job_condition을 사이즈 선택으로 다시 돌아가게
         #2. 다른 오류로 payment 창으로 넘어가지 못했을 경우 새로고침 후 다시 배송지 선택
@@ -168,14 +165,20 @@ def second_step(driver,job_condition="choose address"):
                 return job_condition
         else:
             #만약 문제 없이 결제수단 선택 페이지로 잘 들어가졌다면
-            if(driver.page_source.find('실시간계좌이체') != 1):
-                job_condition = 'choose_payment'
-                return job_condition
-            #혹시 모를 팝업창이 뜨거나하면 새로고침 후 재시도
-            else:
+            try:
+                payment = WebDriverWait(driver, 5,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
+                return 'choose_payment'
+            except:
                 driver.refresh()
-                sleep(1)
                 continue
+            # if(driver.page_source.find('실시간계좌이체') != 1):
+            #     job_condition = 'choose_payment'
+            #     return job_condition
+            # #혹시 모를 팝업창이 뜨거나하면 새로고침 후 재시도
+            # else:
+            #     driver.refresh()
+            #     sleep(1)
+            #     continue
 
 def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
     for i in range(10):
@@ -199,7 +202,7 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
                 continue
 
             try:
-                qr_code = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
+                qr_code = WebDriverWait(driver, 10, 0.5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
                 print(user_num, "th 아이디 성공!")
                 return "finish"
             except:
@@ -222,8 +225,8 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-    future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    # future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
             test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               

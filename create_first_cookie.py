@@ -41,8 +41,7 @@ def init(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
-    # subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
+    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
     capabilities = dict(DesiredCapabilities.CHROME)
     capabilities['proxy'] = {'proxyType': 'MANUAL',
@@ -62,8 +61,15 @@ def init(user_num):
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
     options.add_argument('--profile-directory=Profile 1')
 
-    driver = webdriver.Chrome(executable_path='.\98\chromedriver.exe', desired_capabilities=capabilities, chrome_options=options)
-
+    # driver = webdriver.Chrome(executable_path='.\98\chromedriver.exe', desired_capabilities=capabilities, chrome_options=options)
+    #크롬 드라이버 설정
+    try:
+        driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
+    except:
+        #크롬 드라이버 버전 관리
+        chromedriver_autoinstaller.install(True)  
+        driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
+    
 
     #크롬 드라이버 설정
     try:

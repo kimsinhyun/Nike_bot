@@ -1,3 +1,4 @@
+import time
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,7 +19,7 @@ import random
 
 def goto_page(Chrome_driver, link, size, get_size_mode):
     Chrome_driver.get(link)
-    wait = WebDriverWait(Chrome_driver, 5,0.5)
+    wait = WebDriverWait(Chrome_driver, 10, 0.2)
     # sleep(1)
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
@@ -39,13 +40,27 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # sleep(1.5)
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             if(get_size_mode == "select_size"):
-                size_element = wait.until(EC.element_to_be_clickable((By.XPATH,\
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
-                # sleep(1)
-                action.move_to_element(size_element).click().perform()
+                try:
+                    size_element = wait.until(EC.presence_of_element_located((By.XPATH,\
+                            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]/label[text()=' + size  + ']')))
+                    action.move_to_element(size_element).click().perform()
 
-                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))
-                action.move_to_element(purchase_btn).click().perform()
+                    purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                    action.move_to_element(purchase_btn).click().perform()
+                    break
+                except:
+                    sleep(2)
+                    size_elements = Chrome_driver.find_elements(By.XPATH, \
+                            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
+                    random_size = random.randint(0,len(size_elements)-1)
+                    size_element = size_elements[random_size]
+                    action.move_to_element(size_element).click().perform()
+                    purchase_btn =  wait.until(EC.presence_of_all_elements_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                    action.move_to_element(purchase_btn).click().perform()
+                    get_size_mode = "random_size"
+                    break
+                # sleep(1)
+                
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
 
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
@@ -55,19 +70,24 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 random_size = random.randint(0,len(size_elements)-1)
                 size_element = size_elements[random_size]
                 action.move_to_element(size_element).click().perform()
-                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
-                sleep(0.5)
+                # sleep(0.5)
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
 
 
             #======================= A. 만약 "사이즈를 선택해주세요" 라는 문구가 안뜨면 성공한 것으로 간주 ====================
             #======================= B. 사이즈를 선택 했는데 주소 선택 페이지로 안가고 "재고 없음"이란 팝업창이 뜨거나 ======== 
             #======================= 다른 이유 때문에 성공적으로 가지 못하는 경우 해당 예외처리는 부모에서 처리 됨 ============
-            if(Chrome_driver.page_source.find("사이즈를 선택해 주세요") == -1):
+            # if(Chrome_driver.page_source.find("사이즈를 선택해 주세요") == -1):
+            #     break
+            # #======================= 한 번만이라도 희망하는 사이즈로 구매를 실패할 경우 쭉 random size로 ================
+            # else:
+            #     get_size_mode="random_size"
+            try:
+                check_go_to_next_step =  WebDriverWait(Chrome_driver, 1.2, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
                 break
-            #======================= 한 번만이라도 희망하는 사이즈로 구매를 실패할 경우 쭉 random size로 ================
-            else:
+            except:
                 get_size_mode="random_size"
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
 
@@ -81,13 +101,13 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
         for i in range(10): 
             if(Chrome_driver.page_source.find("사이즈 선택") == -1): 
                 Chrome_driver.get(link)
-                sleep(2)
+                # sleep(1)
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
         for i in range(100):
             if((i % 3 == 0) & (i != 0)):
                 Chrome_driver.get(link)
-                sleep(2)
+                # sleep(2)
             # sleep(1.5)
             if(get_size_mode == "select_size"):
                 size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
@@ -151,7 +171,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
 
                 sleep(0.2)
-                purchase_btn = wait.until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
+                purchase_btn = wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
             
             if(Chrome_driver.page_source.find("사이즈를 선택해 주세요") == -1):

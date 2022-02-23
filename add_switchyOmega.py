@@ -51,8 +51,7 @@ def add_switchOmega(user_num):
         'password': f'{proxy_pw}'}
 
     #run chrome by subprocess
-    subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
-    # subprocess.Popen(r'{exe} --remote-debugging-port={port_num} --user-data-dir="{cookie}"'.format(exe=chrome_exe_path, cookie=chrome_cookie_path, port_num=proxy_port))
+    subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
     capabilities = dict(DesiredCapabilities.CHROME)
     capabilities['proxy'] = {'proxyType': 'MANUAL',
@@ -146,7 +145,8 @@ def add_switchOmega(user_num):
 
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-    future_test_results = [ executor.submit(add_switchOmega, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(add_switchOmega, i) for i in range(2) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(add_switchOmega, i) for i in range(user_num) ] # running same test 6 times, using test number as url
     # future_test_results = [ executor.submit(add_switchOmega, 0) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
