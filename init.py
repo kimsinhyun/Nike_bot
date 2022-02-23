@@ -90,6 +90,12 @@ def init(user_num):
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
     driver.implicitly_wait(2)  
+
+    driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
+    sleep(2)
+    driver.refresh()
+    sleep(10)
+
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
     
