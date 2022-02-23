@@ -57,7 +57,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 action.move_to_element(size_element).click().perform()
                 purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
-                sleep(0.2)
+                sleep(0.5)
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
 
 

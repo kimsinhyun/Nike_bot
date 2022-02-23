@@ -139,7 +139,7 @@ def add_switchOmega(user_num):
         apply_change_btn=  WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[11]/a')))
     apply_change_btn.click()
 
-    # sleep(1)
+    sleep(1)
     driver.get('https://www.google.com/search?q=what+is+my+ip&oq=what+is+my+ip&aqs=chrome..69i57j0i20i263i512j0i512l7.847j0j9&sourceid=chrome&ie=UTF-8')
     sleep(2)
     driver.refresh()
