@@ -42,13 +42,37 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             if(get_size_mode == "select_size"):
                 # try:
                 sleep(5)
-                size_element = WebDriverWait(Chrome_driver, 3,0.5).until(EC.element_to_be_clickable((By.XPATH,\
-                    # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[2]/div/span[@typename="255"]')))
-                action.move_to_element(size_element).click().perform()
+                while 1:
+                    # sleep(10)
+                    size_elements = Chrome_driver.find_elements(By.XPATH, \
+                        # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
+                        '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
+                    print(len(size_elements))
+                    sleep(0.5)
+                    if len(size_elements) > 0:
+                        break
+                # #----------------------------------------------------
+                # size_element = WebDriverWait(Chrome_driver, 1,0.25).until(EC.element_to_be_clickable((By.XPATH,\
+                #     # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
+                #     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '"]')))
+                # action.move_to_element(size_element).click().perform()
 
-                purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                # purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                # action.move_to_element(purchase_btn).click().perform()
+                # #----------------------------------------------------
+
+                try:
+                    size_element = Chrome_driver.find_element(By.XPATH,\
+                        '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and contains(@disabled)]')
+                    print('hehhhh')
+                    action.move_to_element(size_element).click().perform()
+                except:
+                    random_size = random.randint(0,len(size_elements)-1)
+                    size_element = size_elements[random_size]
+                    action.move_to_element(size_element).click().perform()
+                purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
+
                 # break
                 # except:
                 #     size_elements = Chrome_driver.find_elements(By.XPATH, \
@@ -66,11 +90,31 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
 
             #=======================이후 계속 랜덤 사이즈로 (select_size mode)==============================
             elif(get_size_mode == "random_size"):
-                size_elements = Chrome_driver.find_elements(By.XPATH, \
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
-                random_size = random.randint(0,len(size_elements)-1)
-                size_element = size_elements[random_size]
-                action.move_to_element(size_element).click().perform()
+                    # sleep(10)
+                while 1:
+                    size_elements = Chrome_driver.find_elements(By.XPATH, \
+                        # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
+                        '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
+                    print(len(size_elements))
+                    sleep(0.5)
+                    if len(size_elements) > 0:
+                        break
+                # #----------------------------------------------------
+                # size_element = WebDriverWait(Chrome_driver, 1,0.25).until(EC.element_to_be_clickable((By.XPATH,\
+                #     # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[*]/label[text()=' + size  + ']')))
+                #     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '"]')))
+                # action.move_to_element(size_element).click().perform()
+
+                # purchase_btn =  wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="btn-buy"]/span')))  
+                # action.move_to_element(purchase_btn).click().perform()
+                # #----------------------------------------------------
+
+                try:
+                    random_size = random.randint(0,len(size_elements)-1)
+                    size_element = size_elements[random_size]
+                    action.move_to_element(size_element).click().perform()
+                except:
+                   pass
                 purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
                 # sleep(0.5)
@@ -86,7 +130,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # else:
             #     get_size_mode="random_size"
             try:
-                check_go_to_next_step =  WebDriverWait(Chrome_driver, 1.2, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
+                check_go_to_next_step =  WebDriverWait(Chrome_driver, 1, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
                 break
             except:
                 get_size_mode="random_size"
