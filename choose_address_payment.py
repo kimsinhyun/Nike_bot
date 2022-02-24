@@ -27,15 +27,20 @@ def choose_address(Chrome_driver):
     #             break
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
+    while 1:
+        try:
+            temp_div = WebDriverWait(Chrome_driver, 2,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')))
+        except:
+            break
     action.move_to_element(next_stage).click().perform()
 
 def choose_payment(Chrome_driver):
-    wait = WebDriverWait(Chrome_driver, 6,0.5)
+    wait = WebDriverWait(Chrome_driver, 6,0.25)
     while 1:
         try:
             action = ActionChains(Chrome_driver)
             #-----------------------------------결제 방식 클릭(아직은 카카오페이만 구현되어 있음(추후에 추가 예정)-------------------------------------------
-            payment = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
+            payment = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6')))
             action.move_to_element(payment).click().perform()
 
             #------------------------------------구매 동의 체크 박스-----------------------------------
