@@ -1,3 +1,4 @@
+from cmath import exp
 import time
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
@@ -137,13 +138,28 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # except:
             #     pass
 
+
+            #=======================접속자가 많아 지연되고 있습니다일 경우
+            try:
+                WebDriverWait(Chrome_driver, 1, 0.5).until(EC.presence_of_element_located((By.XPATH, \
+                        '/html/body/div[22]/div')))
+                get_size_mode = "random_size"
+                Chrome_driver.get(link)
+                continue
+            except:
+                pass
+                
+
+
+            #=======================접속자가 많아 지연되고 있습니다일 경우
+
             #=======================처리중이라는 화면이 끝날 때까지 기다림=====================
             temp_check_success = False
             while 1:
                 try:
                     waiting_div =  WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[12]/div[2]')))
-                    print("loading...")
+                    # print("loading...")
                 except:
                     temp_check_success = True
                     print("break")

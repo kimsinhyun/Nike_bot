@@ -80,6 +80,9 @@ def init(user_num):
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
     
     driver.get("https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en")
+    temp_1 = input("enter any key to install ip check extension")
+    driver.get("https://chrome.google.com/webstore/detail/website-ip/agbkjcoclkflcpkognkhjkllhimlpice/related")
+
     temp = input("enter any key to terminate: ")
     process.kill()
 # 멀티 쓰레딩

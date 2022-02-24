@@ -95,7 +95,7 @@ def init(user_num):
     driver.get("https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=1&acr=1&acq=%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C&qdt=0&ie=utf8&query=%EB%82%B4+%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C+%ED%99%95%EC%9D%B8")
     sleep(2)
     driver.refresh()
-    sleep(5)
+    sleep(10)
 
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
@@ -105,15 +105,15 @@ def init(user_num):
         login(driver, ID, PW, user_num)
 
     sleep(3)
-
+    # temp = input("logged in")
 
     #타임 트리거 (예약 실행)
-    # if(input_hour != "0" or input_min != "0"):
-    #     while True:
-    #         if check_time(input_hour, input_min):
-    #             print("start")
-    #             sleep(0.8)
-    #             break
+    if(input_hour != "0" or input_min != "0"):
+        while True:
+            if check_time(input_hour, input_min):
+                print("start")
+                sleep(0.8)
+                break
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복

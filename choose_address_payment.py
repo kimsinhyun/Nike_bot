@@ -49,6 +49,7 @@ def choose_payment(Chrome_driver):
             action.move_to_element(terms_of_conditions).click().perform()
             
             #----------------------------------------------결제하기 버튼----------------------------------------------
+            sleep(0.8)
             complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
             action.move_to_element(complete_purchase).click().perform()
             break
