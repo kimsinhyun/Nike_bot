@@ -30,8 +30,9 @@ def choose_address(Chrome_driver):
     while 1:
         try:
             temp_div = WebDriverWait(Chrome_driver, 2,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')))
-        except:
             break
+        except:
+            pass
     action.move_to_element(next_stage).click().perform()
 
 def choose_payment(Chrome_driver):
