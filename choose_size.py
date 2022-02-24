@@ -32,7 +32,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
 
         action = ActionChains(Chrome_driver)
         #==========================사이즈를 계속 선택해줘야하기 때문에 100번 반복==================
-        for i in range(100):
+        for i in range(20):
             #======================5번 째 시도마다 한 번씩 새로고침=================
             if((i % 5 == 0) & (i != 0)):
                 Chrome_driver.get(link)
@@ -128,24 +128,31 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # #======================= 한 번만이라도 희망하는 사이즈로 구매를 실패할 경우 쭉 random size로 ================
             # else:
             #     get_size_mode="random_size"
-
+            # try:
+            #     check_go_to_next_step =  WebDriverWait(Chrome_driver, 0.5, 0.1).until(EC.presence_of_element_located((By.XPATH, \
+            #         '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
+            #     print("here")
+            #     get_size_mode="random_size"
+            #     continue
+            # except:
+            #     pass
 
             #=======================처리중이라는 화면이 끝날 때까지 기다림=====================
+            temp_check_success = False
             while 1:
                 try:
                     waiting_div =  WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[12]/div[2]')))
                     print("loading...")
                 except:
+                    temp_check_success = True
+                    print("break")
                     break
+            if(temp_check_success == True):
+                break
             #=======================처리중이라는 화면이 끝날 때까지 기다림=====================
 
-            try:
-                check_go_to_next_step =  WebDriverWait(Chrome_driver, 0.5, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
-                print("here")
-                break
-            except:
-                get_size_mode="random_size"
+            
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
 
 

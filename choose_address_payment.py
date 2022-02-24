@@ -10,7 +10,7 @@ from time import sleep
 def choose_address(Chrome_driver): 
     action = ActionChains(Chrome_driver)
     sleep(2)
-    wait = WebDriverWait(Chrome_driver, 10,0.25)
+    wait = WebDriverWait(Chrome_driver, 5,0.25)
     # sleep(1)
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     #--------------------------------------굳이 클릭하지 않아도 잘 동작하기 때문에 시간 절약을 위애 주석처리------------
@@ -26,13 +26,13 @@ def choose_address(Chrome_driver):
     #         if(Chrome_driver.page_source.find("input-checkbox checked") != -1):
     #             break
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
-    next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
     while 1:
         try:
-            temp_div = WebDriverWait(Chrome_driver, 2,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')))
+            temp_div = WebDriverWait(Chrome_driver, 0.5,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')))
             break
         except:
-            pass
+            continue
+    next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
     action.move_to_element(next_stage).click().perform()
 
 def choose_payment(Chrome_driver):
