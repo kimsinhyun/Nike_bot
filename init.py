@@ -95,25 +95,24 @@ def init(user_num):
     driver.get("https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=1&acr=1&acq=%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C&qdt=0&ie=utf8&query=%EB%82%B4+%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C+%ED%99%95%EC%9D%B8")
     sleep(2)
     driver.refresh()
-    sleep(10)
+    # sleep(10)
 
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
     sleep(3)
-    sleep(4)
-    if(check_logged_in(driver, user_num) == False):
-        login(driver, ID, PW, user_num)
+    # if(check_logged_in(driver, user_num) == False):
+    #     login(driver, ID, PW, user_num)
 
-    sleep(3)
+    # sleep(3)
     # temp = input("logged in")
 
     #타임 트리거 (예약 실행)
-    if(input_hour != "0" or input_min != "0"):
-        while True:
-            if check_time(input_hour, input_min):
-                print("start")
-                sleep(0.8)
-                break
+    # if(input_hour != "0" or input_min != "0"):
+    #     while True:
+    #         if check_time(input_hour, input_min):
+    #             print("start")
+    #             sleep(0.8)
+    #             break
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -122,10 +121,7 @@ def init(user_num):
     for i in range(10):
         if(job_condition=="choose_size"):
             #첫 시도는 희망하는 사이즈로 선택
-            if(i == 0):
-                get_size_mode = "select_size"
-            else:
-                get_size_mode = "random_size"
+            get_size_mode = "select_size"
             #first_step -> 사이즈 서택 페이지, 성공하면 choose_address를 return 받아서 다음 스텝으로 넘어간다.
             job_condition = first_step(driver, LINK, SIZE, get_size_mode, job_condition)
 
@@ -140,7 +136,7 @@ def init(user_num):
 
     temp = input("아무 키를 눌러서 종료해주세요 ")
     temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
-    process.kill()            
+    # process.kill()            
     
 def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     #사이즈 고른 후 주소 선택 화면을 넘어가지 않을 시 5번 시도 (더 많이 하면 no access 뜸)
@@ -233,7 +229,8 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
     future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    # future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(init, i) for i in range(1) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(init, 1) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
             test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               

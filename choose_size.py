@@ -73,8 +73,6 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     temp_check_success = True
                     print("break")
                     break
-            if(temp_check_success == True):
-                break
             #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림=====================
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
             try:
@@ -86,8 +84,10 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             except:
                 pass
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
-
-
+            #======================= 4. 위에 해당하지 않으면 break ===========================
+            if(temp_check_success == True):
+                break
+            #======================= 4. 위에 해당하지 않으면 break ===========================
 
         #===========================구매 페이지로 잘 넘어갔다 확인============================
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
@@ -105,7 +105,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 # sleep(1)
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
-        for i in range(100):
+        for i in range(20):
             if((i % 3 == 0) & (i != 0)):
                 Chrome_driver.get(link)
                 # sleep(2)
@@ -125,8 +125,8 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
                 action.move_to_element(size_list).click().perform()
                 try:
-                    size_element = WebDriverWait(Chrome_driver, 0.5, 0.25).until(By.XPATH,\
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]/a/span[text()="' + size  + '"]')
+                    size_element = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]/a/span[text()="' + size  + '"]')))
                 except:
                     size_elements = Chrome_driver.find_elements(By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]')
@@ -145,46 +145,43 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 #         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
                 # action.move_to_element(temp_element).click().perform()
                 # #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-                
+                purchase_btn = WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                        '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
             
-            #random으로 구매할 수 있는 사이즈를 선택
-            elif(get_size_mode == "random_size"):
-                size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
-                action.move_to_element(size_list).click().perform()
-
-                sleep(0.5)
-                size_elements = Chrome_driver.find_elements(By.XPATH, \
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]')
-                random_size = random.randint(0,len(size_elements)-1)
-                print("(launch)random_size: ", random_size)
-                size_element = size_elements[random_size]
+            #===========================구매 페이지로 잘 넘어갔다 확인============================
+            
+            # #======================= 1. no-access로 넘어갔나 확인           =====================
+            # if(Chrome_driver.current_url.find('checkout') == -1):
+            #     Chrome_driver.get(link)
+            #     continue
+            # #======================= 1. no-access로 넘어갔나 확인           =====================
+            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림(launch 에서는 뺑글뻉글 돌아가는 div)=====================
+            temp_check_success = False
+            while 1:
                 try:
-                    action.move_to_element(size_element).click().perform()
+                    waiting_div =  WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                        '/html/body/div[13]/div[1]')))
                 except:
-                    action.move_to_element(size_list).click().perform()
-                    sleep(0.5)
-                    action.move_to_element(size_element).click().perform()
-
-                #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-                # sleep(0.5)
-                try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
-                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
-                except:
-                    temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
-                action.move_to_element(temp_element).click().perform()
-                #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-
-                sleep(0.2)
-                purchase_btn = wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
-                action.move_to_element(purchase_btn).click().perform()
-            
-            if(Chrome_driver.page_source.find("사이즈를 선택해 주세요") == -1):
+                    temp_check_success = True    
+                    print("break")
+                    break
+            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림=====================
+            #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
+            try:
+                print("1")
+                comfirm_btn = WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                        '/html/body/div[21]/div/div/div[2]/button')))
+                print("2")
+                action.move_to_element(comfirm_btn).click().perform()
+                continue
+            except:
+                print("3")
+                pass
+            #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
+            #======================= 4. 위에 해당하지 않으면 break ===========================
+            if(temp_check_success == True):
                 break
-            else:
-                get_size_mode = "random_size"
+            #======================= 4. 위에 해당하지 않으면 break ===========================
     #==============================url에 "launch"가 있을 때 (스니커즈 구매 페이지)#==============================
         
