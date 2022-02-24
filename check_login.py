@@ -36,16 +36,16 @@ def login(Chrome_driver,user_ID,user_PW, user_num):
     
     pyperclip.copy(user_ID)
     ID_input = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]')))
-    for i in range(30):
-        sleep(0.01)
+    for i in range(20):
+        sleep(0.1)
         ID_input.send_keys(Keys.BACKSPACE)
     sleep(1)
     ID_input.send_keys(Keys.CONTROL + 'v')
 
     pyperclip.copy(user_PW)
     PW_input = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_password"]')))
-    for i in range(30):
-        sleep(0.01)
+    for i in range(20):
+        sleep(0.1)
         PW_input.send_keys(Keys.BACKSPACE)
     sleep(1)
     PW_input.send_keys(Keys.CONTROL + 'v')
