@@ -47,8 +47,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     size_elements = Chrome_driver.find_elements(By.XPATH, \
                         # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
                         '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
-                    print(len(size_elements))
-                    sleep(0.5)
+                    # print(len(size_elements))
                     if len(size_elements) > 0:
                         break
                 # #----------------------------------------------------
@@ -95,7 +94,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     size_elements = Chrome_driver.find_elements(By.XPATH, \
                         # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[1]/div/span[not(@disabled="disabled")]')
                         '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
-                    print(len(size_elements))
+                    # print(len(size_elements))
                     sleep(0.5)
                     if len(size_elements) > 0:
                         break
@@ -129,8 +128,21 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # #======================= 한 번만이라도 희망하는 사이즈로 구매를 실패할 경우 쭉 random size로 ================
             # else:
             #     get_size_mode="random_size"
+
+
+            #=======================처리중이라는 화면이 끝날 때까지 기다림=====================
+            while 1:
+                try:
+                    waiting_div =  WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                        '/html/body/div[12]/div[2]')))
+                    print("loading...")
+                except:
+                    break
+            #=======================처리중이라는 화면이 끝날 때까지 기다림=====================
+
             try:
-                check_go_to_next_step =  WebDriverWait(Chrome_driver, 1, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
+                check_go_to_next_step =  WebDriverWait(Chrome_driver, 0.5, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/h2/span[3]')))
+                print("here")
                 break
             except:
                 get_size_mode="random_size"
