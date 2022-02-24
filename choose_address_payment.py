@@ -44,12 +44,20 @@ def choose_payment(Chrome_driver):
             payment = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6')))
             action.move_to_element(payment).click().perform()
 
+            #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
+            try:
+                check_payment_clicked = WebDriverWait(Chrome_driver, 0.5,0.1).until(EC.presence_of_element_located((By.XPATH, \
+                    '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[@class="payment-method-item active"]/h6[text()=="카카오페이"]')))
+            except:
+                action.move_to_element(payment).click().perform()
+            #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
+
             #------------------------------------구매 동의 체크 박스-----------------------------------
             terms_of_conditions = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')))
             action.move_to_element(terms_of_conditions).click().perform()
             
             #----------------------------------------------결제하기 버튼----------------------------------------------
-            sleep(0.8)
+            sleep(0.5)
             complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
             action.move_to_element(complete_purchase).click().perform()
             break
