@@ -39,7 +39,7 @@ def init(user_num):
     driver = execute_subprocess_and_return_driver(user_info,user_num)
 
     #프록시 적용 확인용 (주석처리 해도 상관 없음)
-    show_proxy_ip(driver=driver, hold_time=20)
+    show_proxy_ip(driver=driver, hold_time=12)
 
     #나이키 코리아로 이동
     driver.get("https://www.nike.com/kr/ko_kr/")
@@ -51,7 +51,8 @@ def init(user_num):
     check_logged_in(driver, user_num)
 
     #타임 트리거 (예약 실행)
-    # time_trigger(input_hour, input_min)
+    time_trigger(input_hour, input_min, user_num)
+
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -94,7 +95,6 @@ def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
 def second_step(driver,job_condition="choose address"):
     for i in range(10):
         choose_address(driver)
-        # sleep(2)
         #배송지 선택 화면으로 넘어온 후 payment선택 화면으로 정상적으로 이동하지 못했을 시
         #1. no-access이면 job_condition을 사이즈 선택으로 다시 돌아가게
         #2. 다른 오류로 payment 창으로 넘어가지 못했을 경우 새로고침 후 다시 배송지 선택
@@ -112,14 +112,6 @@ def second_step(driver,job_condition="choose address"):
             except:
                 driver.refresh()
                 continue
-            # if(driver.page_source.find('실시간계좌이체') != 1):
-            #     job_condition = 'choose_payment'
-            #     return job_condition
-            # #혹시 모를 팝업창이 뜨거나하면 새로고침 후 재시도
-            # else:
-            #     driver.refresh()
-            #     sleep(1)
-            #     continue
 
 def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
     for i in range(10):
@@ -154,7 +146,7 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-    future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
     # future_test_results = [ executor.submit(init, 0) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        

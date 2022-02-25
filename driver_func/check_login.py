@@ -1,5 +1,5 @@
 
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
@@ -29,7 +29,6 @@ def login(Chrome_driver,user_ID,user_PW, user_num):
     try:
         action = ActionChains(Chrome_driver)
         login_btn = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
-#         login_btn = driver.find_element(By.XPATH,'/html/body/header/div/div[1]/div/div/ul/li[3]/a')
         action.move_to_element(login_btn).click().perform()
     except TimeoutException:
         print(str(user_num) + '번 째 아이디는 이미 로그인 되어 있습니다')

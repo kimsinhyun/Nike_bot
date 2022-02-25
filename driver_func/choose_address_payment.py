@@ -11,21 +11,6 @@ def choose_address(Chrome_driver):
     action = ActionChains(Chrome_driver)
     sleep(2)
     wait = WebDriverWait(Chrome_driver, 1,0.25)
-    # sleep(1)
-    #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
-    #--------------------------------------굳이 클릭하지 않아도 잘 동작하기 때문에 시간 절약을 위애 주석처리------------
-    #--------------------------------------필요할 경우 주석 해제------------------------------------------------------
-    #  default_addr = WebDriverWait(Chrome_driver,3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="shipping_info"]/div[1]/ul/li[3]/div/span/label/i')))
-    # while 1:
-    #     action.move_to_element(default_addr).click().perform()
-    #     sleep(0.2)
-    #     if(Chrome_driver.page_source.find("input-checkbox checked") != -1):
-    #         break
-    #     else:
-    #         sleep(1)
-    #         if(Chrome_driver.page_source.find("input-checkbox checked") != -1):
-    #             break
-    #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     while 1:
         try:
             temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
@@ -35,7 +20,7 @@ def choose_address(Chrome_driver):
             continue
     while 1:
         try:
-            next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
+            next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]'))) 
             action.move_to_element(next_stage).click().perform()
             break
         except:
