@@ -78,7 +78,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
         #===========================구매 페이지로 잘 넘어갔다 확인============================
             
             #======================= 1. no-access로 넘어갔나 확인           =====================
-            if(Chrome_driver.current_url.find('checkout') != -1):
+            if(Chrome_driver.current_url.find('no-access') != -1):
                 Chrome_driver.get(link)
                 continue
             #======================= 1. no-access로 넘어갔나 확인           =====================
@@ -103,6 +103,13 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             except:
                 pass
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
+
+            #======================= 4. 한 번 더 no-access 체크 ============================
+            if(Chrome_driver.current_url.find('no-access') != -1):
+                continue
+            #======================= 4. 한 번 더 no-access 체크 ============================
+
+
             #======================= 4. 위에 해당하지 않으면 break ===========================
             if(temp_check_success == True):
                 break
