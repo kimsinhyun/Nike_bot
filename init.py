@@ -6,17 +6,23 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import os
 import chromedriver_autoinstaller
 from time import sleep
 import subprocess
 import pandas as pd
 from concurrent import futures
 
-from check_login import check_logged_in, login
-from check_time import check_time
-from choose_address_payment import choose_address, choose_payment
-from choose_size import goto_page
+from driver_func.check_login import check_logged_in, login
+from driver_func.check_time import check_time
+from driver_func.choose_address_payment import choose_address, choose_payment
+from driver_func.choose_size import goto_page
+
+from driver_setting.user_info import get_user_info
+from driver_setting.chrome_cookie_driver_exe import get_cookie_driver_exe
+from driver_setting.set_chrome_options import get_chrome_options
+from driver_setting.combinate_settings_to_one_driver import execute_subprocess_and_return_driver
+from driver_func.show_proxy_ip import show_proxy_ip
+from driver_func.time_trigger import time_trigger
 
 user_info = pd.read_csv('./info.csv')
 #몇 개의 계정을 돌릴건지 확인 -> 쓰레드 갯수 때문에 필요함
@@ -26,93 +32,31 @@ input_hour = input("set hour: ")
 input_min = input("set min: ")
 
 def init(user_num):
-    #--------------------------아이디 패스워드 프록시 설정--------------------------
-    ID = str(user_info[user_info['DIR_NUM']==user_num]['ID'].values[0])
-    PW = str(user_info[user_info['DIR_NUM']==user_num]['PW'].values[0])
-    PROXY = str(user_info[user_info['DIR_NUM']==user_num]['PROXY'].values[0])
-    LINK = str(user_info[user_info['DIR_NUM']==user_num]['LINK'].values[0])
-    SIZE = str(user_info[user_info['DIR_NUM']==user_num]['SIZE'].values[0])
+    #유저 정보
+    ID, PW, PROXY, LINK, SIZE,proxy_dict =  get_user_info(user_info, user_num)
 
-    #각 사용자마다 각각의 쿠키 파일 연결
-    chrome_cookie_path = str(os.path.abspath(os.getcwd()))
-    chrome_cookie_path = chrome_cookie_path.replace('\개발용dir','')
-    chrome_cookie_path = chrome_cookie_path + "\\" +str(user_num) + '\Chrome_cookie'
+    # 드라이버 설정
+    driver = execute_subprocess_and_return_driver(user_info,user_num)
 
-    chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
+    #프록시 적용 확인용 (주석처리 해도 상관 없음)
+    show_proxy_ip(driver=driver, hold_time=10)
 
-    #크롬 실행파일
-    chrome_exe_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-    chrome_driver_path = '.\\' + str(chrome_ver) + '\\chromedriver.exe'
-
-    #proxy config
-    proxy_ip = PROXY.split(":")[0]
-    proxy_port = PROXY.split(":")[1]
-    # proxy_port = "9222"
-    proxy_user = PROXY.split(":")[2]
-    proxy_pw = PROXY.split(":")[3]
-    proxy_address = proxy_ip + ":" + proxy_port
-
-    print(proxy_port)
-    proxy = {'address': f'{proxy_address}',
-        'username': f'{proxy_user}',
-        'password': f'{proxy_pw}'}
-
-    #run chrome by subprocess
-    process = subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
-
-    capabilities = dict(DesiredCapabilities.CHROME) 
-    capabilities['proxy'] = {'proxyType': 'MANUAL',
-                            'httpProxy': proxy['address'],
-                            'ftpProxy': proxy['address'],
-                            'sslProxy': proxy['address'],
-                            'noProxy': '',
-                            'class': "org.openqa.selenium.Proxy",
-                            'autodetect': False,
-                            'socksUsername': proxy['username'],
-                            'socksPassword': proxy['password']}
-
-    capabilities["pageLoadStrategy"] = "none"
-
-    options = webdriver.ChromeOptions()
-    # options.add_argument("--start-maximized")
-    options.add_experimental_option("debuggerAddress", f"127.0.0.1:{proxy_port}")
-    # options.add_argument('--blink-settings=imagesEnabled=false')
-    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
-    options.add_argument('--profile-directory=Profile 1')
-
-    driver = webdriver.Chrome(executable_path='.\98\chromedriver.exe', desired_capabilities=capabilities, chrome_options=options)
-
-
-    #크롬 드라이버 설정
-    try:
-        driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
-    except:
-        #크롬 드라이버 버전 관리`
-        chromedriver_autoinstaller.install(True)  
-        driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
-    
-    # driver.implicitly_wait(2)  
-    driver.get("https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=1&acr=1&acq=%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C&qdt=0&ie=utf8&query=%EB%82%B4+%EC%95%84%EC%9D%B4%ED%94%BC+%EC%A3%BC%EC%86%8C+%ED%99%95%EC%9D%B8")
-    sleep(2)
-    driver.refresh()
-    # sleep(10)
-
+    #나이키 코리아로 이동
     driver.get("https://www.nike.com/kr/ko_kr/")
     driver.maximize_window()
+    
+    
+    #로그인 확인 (아직 자동로그인은 너무 벤을 자주 먹어서 제외함)
     sleep(3)
+    check_logged_in(driver, user_num)
+    # temp = input("로그인을 모두 마쳤습니다")
     # if(check_logged_in(driver, user_num) == False):
     #     login(driver, ID, PW, user_num)
 
-    # sleep(3)
-    # temp = input("logged in")
+
 
     #타임 트리거 (예약 실행)
-    # if(input_hour != "0" or input_min != "0"):
-    #     while True:
-    #         if check_time(input_hour, input_min):
-    #             print("start")
-    #             sleep(0.8)
-    #             break
+    time_trigger(input_hour, input_min)
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -136,7 +80,6 @@ def init(user_num):
 
     temp = input("아무 키를 눌러서 종료해주세요 ")
     temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
-    # process.kill()            
     
 def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     #사이즈 고른 후 주소 선택 화면을 넘어가지 않을 시 5번 시도 (더 많이 하면 no access 뜸)
@@ -212,24 +155,11 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
                 print("여기")
                 return "finish"
 
-            
-            # ------지금 이부분이 제대로 동작이 안되서 우선 뺏음 있으면 더 좋은데 없어도 잘 될 듯--------
-            # 2-1. 만약 QR코드가 제대로 떴을 경우
-            # sleep(10) 
-            # if(driver.page_source.find("스캔하면") != -1):
-            #     print(user_num, "th user success!")
-            #     return "finish"
-            # # 2-2. 만약 제대로 뜨지 않았을 경우
-            # else:
-            #     print('here')
-            #     return "finish"
-
 
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
     future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    # future_test_results = [ executor.submit(init, i) for i in range(1) ] # running same test 6 times, using test number as url
     # future_test_results = [ executor.submit(init, 1) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        

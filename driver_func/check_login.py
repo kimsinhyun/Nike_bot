@@ -13,6 +13,7 @@ def check_logged_in(Chrome_driver, user_num):
     wait = WebDriverWait(Chrome_driver, 10, 0.5)
     try:
         login_btn = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
+        print(str(user_num) + '번 째 아이디 로그인 필요')
         return False
     except TimeoutException:
         print(str(user_num) + '번 째 아이디는 이미 로그인 되어 있습니다')

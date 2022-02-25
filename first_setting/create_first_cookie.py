@@ -1,65 +1,41 @@
+from posixpath import abspath
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities 
 
-import os
+import os, sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 import chromedriver_autoinstaller
 from time import sleep
 import subprocess
 import pandas as pd
 from concurrent import futures
+from driver_setting.user_info import get_user_info
+from driver_setting.chrome_cookie_driver_exe import get_cookie_driver_exe
+from driver_setting.set_chrome_options import get_chrome_options
 
-user_info = pd.read_csv('./info.csv')
+
+user_info = pd.read_csv('../info.csv')
 #몇 개의 계정을 돌릴건지 확인 -> 쓰레드 갯수 때문에 필요함
 user_num = len(user_info)
 
 def init(user_num):
     #--------------------------아이디 패스워드 프록시 설정--------------------------
-    PROXY = str(user_info[user_info['DIR_NUM']==user_num]['PROXY'].values[0])
+    ID, PW, PROXY, LINK, SIZE,proxy_dict =  get_user_info(user_info, user_num)
+    proxy_port = proxy_dict['proxy_port']
 
-    #각 사용자마다 각각의 쿠키 파일 연결
-    chrome_cookie_path = str(os.path.abspath(os.getcwd()))
-    chrome_cookie_path = chrome_cookie_path.replace('\개발용dir','')
-    chrome_cookie_path = chrome_cookie_path + "\\" +str(user_num) + '\Chrome_cookie'
-
+    #크롬 버전
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
 
-    #크롬 실행파일
-    chrome_exe_path = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-    chrome_driver_path = '.\\' + str(chrome_ver) + '\\chromedriver.exe'
-
-    #proxy config
-    proxy_ip = PROXY.split(":")[0]
-    proxy_port = PROXY.split(":")[1]
-    # proxy_port = "9222"
-    proxy_user = PROXY.split(":")[2]
-    proxy_pw = PROXY.split(":")[3]
-    proxy_address = proxy_ip + ":" + proxy_port
-
-    print(proxy_port)
-    proxy = {'address': f'{proxy_address}',
-        'username': f'{proxy_user}',
-        'password': f'{proxy_pw}'}
-
+    #쿠키, 드라이버 ,exe
+    chrome_cookie_path, chrome_exe_path, chrome_driver_path = get_cookie_driver_exe(chrome_ver, user_num)
+    
     #run chrome by subprocess
     process = subprocess.Popen(f'{chrome_exe_path} --remote-debugging-port={proxy_port} --user-data-dir="{chrome_cookie_path}"')
 
-    capabilities = dict(DesiredCapabilities.CHROME)
-    capabilities['proxy'] = {'proxyType': 'MANUAL',
-                            'httpProxy': proxy['address'],
-                            'ftpProxy': proxy['address'],
-                            'sslProxy': proxy['address'],
-                            'noProxy': '',
-                            'class': "org.openqa.selenium.Proxy",
-                            'autodetect': False,
-                            'socksUsername': proxy['username'],
-                            'socksPassword': proxy['password']}
-
-    options = webdriver.ChromeOptions()
-    # options.add_argument("--start-maximized")
-    options.add_experimental_option("debuggerAddress", f"127.0.0.1:{proxy_port}")
-    options.add_argument('--blink-settings=imagesEnabled=false')
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
-    options.add_argument('--profile-directory=Profile 1')
+    #driver option
+    capabilities, options = get_chrome_options(proxy_dict,proxy_port)
+    driver = webdriver.Chrome(executable_path=f'..\{chrome_ver}\chromedriver.exe', desired_capabilities=capabilities, chrome_options=options)
 
     # driver = webdriver.Chrome(executable_path='.\98\chromedriver.exe', desired_capabilities=capabilities, chrome_options=options)
     #크롬 드라이버 설정

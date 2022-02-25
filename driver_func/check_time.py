@@ -14,6 +14,7 @@ def check_time(hour, minute):
     hour = int(hour)
     minute = int(minute)
 
+    # print(nav_hour, ":", nav_min)
     if (nav_hour == hour ) and (nav_min == minute):
         return True
     else: 
