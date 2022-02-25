@@ -16,5 +16,16 @@ def copyanything(src, dst):
         else: raise
 
 
-for i in range (1,user_num):
-    copyanything("../cookies/0","../cookies/" + str(i))
+def do_copy(user_num):
+    try:
+        copyanything("../cookie_with_SwitchOmega","../cookies/" + str(user_num))
+    except:
+        print(user_num,"번째 쿠키는 이미 존재합니다")
+
+with futures.ThreadPoolExecutor(max_workers=20) as executor: 
+    future_test_results = [ executor.submit(do_copy, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+    for future_test_result in future_test_results: 
+        try:        
+            test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
+        except: # can give a exception in some thread, but 
+            print('thread generated an exception: {:0}'.format(Exception))

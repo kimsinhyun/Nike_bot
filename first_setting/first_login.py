@@ -24,7 +24,7 @@ def fisrt_login(user_num):
     #유저 정보
     ID, PW, _, _, _,_ = get_user_info(user_info, user_num)
     # 드라이버 설정
-    driver = execute_subprocess_and_return_driver(user_info,user_num)
+    driver,_ = execute_subprocess_and_return_driver(user_info,user_num)
     #프록시 적용 확인용 (주석처리 해도 상관 없음)
     show_proxy_ip(driver=driver, hold_time=10)
     #나이키 코리아로 이동

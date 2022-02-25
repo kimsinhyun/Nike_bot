@@ -36,7 +36,7 @@ def init(user_num):
     ID, PW, PROXY, LINK, SIZE,proxy_dict =  get_user_info(user_info, user_num)
 
     # 드라이버 설정
-    driver = execute_subprocess_and_return_driver(user_info,user_num)
+    driver,_ = execute_subprocess_and_return_driver(user_info,user_num)
 
     #프록시 적용 확인용 (주석처리 해도 상관 없음)
     show_proxy_ip(driver=driver, hold_time=12)

@@ -32,4 +32,4 @@ def execute_subprocess_and_return_driver(user_info, user_num):
         #크롬 드라이버 버전 관리
         chromedriver_autoinstaller.install(True)  
         driver = webdriver.Chrome(executable_path=f'{chrome_driver_path}',desired_capabilities=capabilities, options=options)
-    return driver
+    return driver, process
