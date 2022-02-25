@@ -12,7 +12,4 @@ def get_cookie_driver_exe(chrome_ver, user_num):
     chrome_driver_path = str(os.path.abspath(os.getcwd())) + '\\' + str(chrome_ver) + '\\chromedriver.exe'
     chrome_driver_path = chrome_driver_path.replace('\\first_setting','')
     chrome_driver_path = chrome_driver_path.replace('\\driver_setting','')
-    print(chrome_driver_path)
     return chrome_cookie_path, chrome_exe_path, chrome_driver_path
-
-get_cookie_driver_exe(98, 0)

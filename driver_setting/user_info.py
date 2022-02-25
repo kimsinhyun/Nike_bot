@@ -2,7 +2,6 @@ from typing import Sized
 import pandas as pd
 
 def get_user_info(user_info, user_num):
-    print(user_info.columns)
     ID = str(user_info[user_info['DIR_NUM']==user_num]['ID'].values[0])
     PW = str(user_info[user_info['DIR_NUM']==user_num]['PW'].values[0])
     PROXY = str(user_info[user_info['DIR_NUM']==user_num]['PROXY'].values[0])

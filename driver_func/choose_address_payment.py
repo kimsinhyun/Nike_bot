@@ -10,7 +10,7 @@ from time import sleep
 def choose_address(Chrome_driver): 
     action = ActionChains(Chrome_driver)
     sleep(2)
-    wait = WebDriverWait(Chrome_driver, 5,0.25)
+    wait = WebDriverWait(Chrome_driver, 1,0.25)
     # sleep(1)
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     #--------------------------------------굳이 클릭하지 않아도 잘 동작하기 때문에 시간 절약을 위애 주석처리------------
@@ -28,12 +28,20 @@ def choose_address(Chrome_driver):
     #--------------------------------------여기 부분은 기본 주소 체크 박스 클릭하는 곳---------------------------------
     while 1:
         try:
-            temp_div = WebDriverWait(Chrome_driver, 0.5,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')))
+            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
             break
         except:
+            print("temp_div loading...")
             continue
-    next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
-    action.move_to_element(next_stage).click().perform()
+    while 1:
+        try:
+            next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]')))
+            action.move_to_element(next_stage).click().perform()
+            break
+        except:
+            print("address test")
+            continue
+
 
 def choose_payment(Chrome_driver):
     wait = WebDriverWait(Chrome_driver, 6,0.25)
@@ -45,11 +53,17 @@ def choose_payment(Chrome_driver):
             action.move_to_element(payment).click().perform()
 
             #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
-            try:
-                check_payment_clicked = WebDriverWait(Chrome_driver, 0.5,0.1).until(EC.presence_of_element_located((By.XPATH, \
-                    '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[@class="payment-method-item active"]/h6[text()="카카오페이"]')))
-            except:
-                action.move_to_element(payment).click().perform()
+            while 1:
+                try:
+                    print("payment test")
+                    check_payment_clicked = WebDriverWait(Chrome_driver, 0.5,0.1).until(EC.presence_of_element_located((By.XPATH, \
+                        '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]')))
+                    if(check_payment_clicked.get_attribute("class") == "payment-method-item active"):
+                        break
+                    else:
+                        action.move_to_element(payment).click().perform()
+                except:
+                    action.move_to_element(payment).click().perform()
             #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
 
             #------------------------------------구매 동의 체크 박스-----------------------------------
@@ -57,7 +71,7 @@ def choose_payment(Chrome_driver):
             action.move_to_element(terms_of_conditions).click().perform()
             
             #----------------------------------------------결제하기 버튼----------------------------------------------
-            sleep(0.5)
+            # sleep(0.5)
             complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
             action.move_to_element(complete_purchase).click().perform()
             break

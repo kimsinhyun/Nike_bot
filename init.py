@@ -39,7 +39,7 @@ def init(user_num):
     driver = execute_subprocess_and_return_driver(user_info,user_num)
 
     #프록시 적용 확인용 (주석처리 해도 상관 없음)
-    show_proxy_ip(driver=driver, hold_time=10)
+    show_proxy_ip(driver=driver, hold_time=20)
 
     #나이키 코리아로 이동
     driver.get("https://www.nike.com/kr/ko_kr/")
@@ -49,14 +49,9 @@ def init(user_num):
     #로그인 확인 (아직 자동로그인은 너무 벤을 자주 먹어서 제외함)
     sleep(3)
     check_logged_in(driver, user_num)
-    # temp = input("로그인을 모두 마쳤습니다")
-    # if(check_logged_in(driver, user_num) == False):
-    #     login(driver, ID, PW, user_num)
-
-
 
     #타임 트리거 (예약 실행)
-    time_trigger(input_hour, input_min)
+    # time_trigger(input_hour, input_min)
 
     #job_condition은 총 "사이즈선택", "배송지 선택", "결제방식 선택" 세 가지로 구성됨
     #control flow 용, 각 쓰레드마다 최대 10번씩만 반복
@@ -159,8 +154,8 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
 # 멀티 쓰레딩
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
                                                                     #user_num을 바꿔서 원하는 쓰레드 개수를 지정할 수 있음)
-    future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    # future_test_results = [ executor.submit(init, 1) ] # running same test 6 times, using test number as url
+    future_test_results = [ executor.submit(init, i) for i in range(2) ] # running same test 6 times, using test number as url
+    # future_test_results = [ executor.submit(init, 0) ] # running same test 6 times, using test number as url
     for future_test_result in future_test_results: 
         try:        
             test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
