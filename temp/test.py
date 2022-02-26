@@ -11,6 +11,9 @@ from driver_func.check_login import check_logged_in, login
 from driver_func.user_info import get_user_info
 from driver_func.show_ip import show_proxy_ip
 from driver_func.time_trigger import time_trigger
+from driver_func.workflow import first_step,second_step,thrid_step
+
+
 
 user_info = pd.read_csv('../info.csv')
 user_num = len(user_info)
@@ -25,11 +28,10 @@ def main(user_num):
      user_proxy = str(user_info[user_info['DIR_NUM']==user_num]['PROXY'].values[0])
      driver= WebDriver(user_proxy,user_num)
      driverinstance = driver.driver_instance
-     # load_cookie(driverinstance)
+
      # show ip
      show_proxy_ip(driver=driverinstance, hold_time=5, check_ip = check_ip)
 
-     time_trigger(input_hour, input_min, user_num)
 
 
 
@@ -38,10 +40,29 @@ def main(user_num):
      time.sleep(3)
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
+     
 
-     terminate = input("enter any key to terminate")
-     terminate = input("enter any key to terminate")
-     print("done")
+     time_trigger(input_hour, input_min, user_num)
+
+     job_condition = "choose_size"
+     for i in range(10):
+          if(job_condition=="choose_size"):
+               #첫 시도는 희망하는 사이즈로 선택
+               get_size_mode = "select_size"
+               #first_step -> 사이즈 서택 페이지, 성공하면 choose_address를 return 받아서 다음 스텝으로 넘어간다.
+               job_condition = first_step(driverinstance, LINK, SIZE, get_size_mode, job_condition)
+
+          if(job_condition=="choose address"):
+               job_condition = second_step(driverinstance,job_condition)
+
+          if(job_condition=="choose_payment"):
+               job_condition = thrid_step(driverinstance,user_num, LINK,SIZE,get_size_mode, job_condition)
+
+          if(job_condition == "finish"):
+               break
+
+     temp = input("아무 키를 눌러서 종료해주세요 ")
+     temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
 
 with futures.ThreadPoolExecutor(max_workers=20) as executor: 
      future_test_results = [ executor.submit(main, i) for i in range(user_num) ] # running same test 6 times, using test number as url
