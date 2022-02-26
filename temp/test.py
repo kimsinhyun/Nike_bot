@@ -38,6 +38,7 @@ def main(user_num):
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
      
+     time_trigger(input_hour, input_min, user_num)
 
      job_condition = "choose_size"
      for i in range(10):

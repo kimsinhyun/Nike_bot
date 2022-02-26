@@ -1,5 +1,3 @@
-from cmath import exp
-from tkinter import E
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -95,7 +93,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
             try:
                 print("temp_check_alert")
-                temp_check_alert = WebDriverWait(Chrome_driver, 0.7, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                temp_check_alert = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[22]/div')))
                 print("aaa")
                 get_size_mode = "select_size"
@@ -200,11 +198,11 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     temp_check_success = True    
                     print("break")
                     break
-            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림=====================
-            #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
+            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림 =====================
+            #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도 ====================
             try:
                 print("1")
-                comfirm_btn = WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
+                comfirm_btn = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[21]/div/div/div[2]/button')))
                 print("2")
                 action.move_to_element(comfirm_btn).click().perform()

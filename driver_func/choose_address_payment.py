@@ -3,17 +3,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import ActionChains
 
-
 from time import sleep
-
 
 def choose_address(Chrome_driver): 
     action = ActionChains(Chrome_driver)
-    sleep(2)
-    wait = WebDriverWait(Chrome_driver, 1,0.25)
+    # wait = WebDriverWait(Chrome_driver, 1,0.25)
     while 1:
         try:
-            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="shipping_info"]/div[1]/ul/li[2]')
+            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
             print("asdasd")
             break
         except:
@@ -21,7 +18,8 @@ def choose_address(Chrome_driver):
             continue
     while 1:
         try:
-            next_stage = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="btn-next"]'))) 
+            next_stage = Chrome_driver.find_element(By.XPATH, '//*[@id="btn-next"]')
+            print("address next_stage")
             action.move_to_element(next_stage).click().perform()
             break
         except:
@@ -37,7 +35,6 @@ def choose_payment(Chrome_driver):
             #-----------------------------------결제 방식 클릭(아직은 카카오페이만 구현되어 있음(추후에 추가 예정)-------------------------------------------
             payment = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6')))
             action.move_to_element(payment).click().perform()
-
             #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
             while 1:
                 try:
@@ -67,5 +64,3 @@ def choose_payment(Chrome_driver):
             Chrome_driver.refresh()
             sleep(1)
             continue
-        
-        

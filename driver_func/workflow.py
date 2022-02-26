@@ -1,9 +1,8 @@
-import sys
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from time import sleep
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -39,7 +38,7 @@ def second_step(driver,job_condition="choose address"):
         else:
             #만약 문제 없이 결제수단 선택 페이지로 잘 들어가졌다면
             try:
-                payment = WebDriverWait(driver, 5,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
+                payment = WebDriverWait(driver, 2,0.25).until(EC.presence_of_element_located((By.XPATH, '//*[@id="payment-review"]/div[1]/ul/li[1]/div/div[1]/h6/img')))
                 return 'choose_payment'
             except:
                 driver.refresh()

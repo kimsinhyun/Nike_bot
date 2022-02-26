@@ -11,5 +11,3 @@ def time_trigger(start_hour, start_min, user_num):
                 print("start")
                 sleep(0.8)
                 break
-
-# time_trigger("15","55")
