@@ -148,7 +148,6 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 except:
                     continue
             #============= Buy 버튼이 생길 때까지 기다리기==================
-
             if(get_size_mode == "select_size"):
                 size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))

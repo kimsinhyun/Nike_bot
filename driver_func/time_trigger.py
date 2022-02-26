@@ -7,7 +7,7 @@ def time_trigger(start_hour, start_min, user_num):
     #타임 트리거 (예약 실행)
     if(start_hour != "0" or start_min != "0"):
         while True:
-            if check_time(start_hour, start_min):
+            if check_time(start_hour, start_min,user_num):
                 print("start")
                 sleep(0.8)
                 break

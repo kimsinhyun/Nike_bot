@@ -15,6 +15,8 @@ def copyanything(src, dst):
             shutil.copy(src, dst)
         else: raise
 
+# for i in range(user_num):
+#     copyanything("../cookie_with_SwitchOmega","../cookies/" + str(user_num))
 
 def do_copy(user_num):
     try:

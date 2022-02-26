@@ -92,9 +92,9 @@ def add_switchOmega(user_num):
     except:
         apply_change_btn=  WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/header/nav/li[11]/a')))
     apply_change_btn.click()
-
+    sleep(3)
     process.kill()
-    sleep(1)
+    sleep(4)
     driver,process = execute_subprocess_and_return_driver(user_info,user_num)
     driver.get('https://www.findip.kr/')
     sleep(2)
