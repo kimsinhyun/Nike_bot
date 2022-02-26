@@ -19,7 +19,7 @@ def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
         #배송지 선택 창으로 넘어가는지 확인
         #no-access 혹은 사이즈 선택 창에서 성공적으로 실행되지 않았다면 random_size 모드로 사이즈 선택 총 5번 실행
         if(driver.current_url.find('checkout') == -1):
-            get_size_mode = 'random_size'
+            get_size_mode = 'choose_size'
         else:
             job_condition = 'choose address'
             return job_condition

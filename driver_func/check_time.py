@@ -6,8 +6,10 @@ def check_time(hour, minute,user_num):
     url = 'https://www.naver.com/'
     date = urllib.request.urlopen(url).headers['Date'][5:-4]
     nav_hour, nav_min, nav_sec =  date[12:14], date[15:17], date[18:]
-    nav_hour = str((int(nav_hour)+ 9))
-
+    if(int(nav_hour) <=9):
+        nav_hour = str((int(nav_hour)+ 9) % 24)
+    else:
+        nav_hour = str(int(nav_hour) + 9)
     nav_hour = int(nav_hour)
     nav_min = int(nav_min)
 
@@ -15,8 +17,8 @@ def check_time(hour, minute,user_num):
     minute = int(minute)
 
     if(user_num == 0):
-        print(nav_hour, ":", nav_min)
-    if (nav_hour == hour ) and (nav_min == minute):
+        print(nav_hour, ":", nav_min, ":", nav_sec)
+    if (nav_hour == hour) and (nav_min == minute):
         return True
     else: 
         return False

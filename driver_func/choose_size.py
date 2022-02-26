@@ -204,6 +204,8 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                 action.move_to_element(comfirm_btn).click().perform()
                 continue
             except:
+                if(Chrome_driver.current_url.find("checkout") != -1):
+                    break
                 print("3")
                 pass
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================

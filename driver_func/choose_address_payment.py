@@ -13,7 +13,8 @@ def choose_address(Chrome_driver):
     wait = WebDriverWait(Chrome_driver, 1,0.25)
     while 1:
         try:
-            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
+            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="shipping_info"]/div[1]/ul/li[2]')
+            print("asdasd")
             break
         except:
             print("temp_div loading...")

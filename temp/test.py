@@ -6,7 +6,7 @@ import time
 from concurrent import futures
 import pandas as pd
 
-from temp.setting import WebDriver, load_cookie, save_cookie
+from temp.setting import WebDriver
 from driver_func.check_login import check_logged_in, login
 from driver_func.user_info import get_user_info
 from driver_func.show_ip import show_proxy_ip
@@ -32,17 +32,12 @@ def main(user_num):
      # show ip
      show_proxy_ip(driver=driverinstance, hold_time=5, check_ip = check_ip)
 
-
-
-
      driverinstance.get("https://www.nike.com/kr/ko_kr/") 
      # save_cookie(driverinstance)
      time.sleep(3)
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
      
-
-     time_trigger(input_hour, input_min, user_num)
 
      job_condition = "choose_size"
      for i in range(10):

@@ -23,7 +23,7 @@ def check_logged_in(Chrome_driver, user_num):
 #2. 할 수는 있는데 완벽하게 할려면 로그인 시간을 좀 오래두고 해야할 수 있음
 #3. 지금은 당장 급한게 아니니까 로그인 정도는 수동으로 한 번만 해놓으면 앞으로 실행할 때마다 쿠키 파일이 설정되어 있어서 알아서 로그인 되어 있기 떄문에 문제 없음 (추후에 수정 요청 시 추가 삽가능합니다!)
 def login(Chrome_driver,user_ID,user_PW, user_num):
-    wait = WebDriverWait(Chrome_driver, 10,1)
+    wait = WebDriverWait(Chrome_driver, 5,1)
     sleep(int(user_num) * 11)
     print(str(user_num) + '번 째 아이디의 로그인을 시작합니다')
     try:
