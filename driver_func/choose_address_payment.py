@@ -54,11 +54,13 @@ def choose_payment(Chrome_driver):
 
             #------------------------------------구매 동의 체크 박스-----------------------------------
             terms_of_conditions = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')))
+            sleep(0.1)
             action.move_to_element(terms_of_conditions).click().perform()
             
             #----------------------------------------------결제하기 버튼----------------------------------------------
             # sleep(0.5)
             complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
+            sleep(0.1)
             action.move_to_element(complete_purchase).click().perform()
             break
         except:

@@ -1,17 +1,12 @@
 from cmath import exp
-import time
 from tkinter import E
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import ActionChains
 
-
 from time import sleep
 import random
-
-
-
 
 #1. 예약시간에 해당 링크로 이동
 #2. 가끔씩 시간이 됐는데도 상품이 안올라왔을 때 최대 10번 동안 새로고침 (너무 많이 하게 되면 벤 먹기 때문에 10번으로 설정함 -> 추후에 변경 가능)
@@ -25,6 +20,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
         for i in range(10): 
+            print("loop")
             if(Chrome_driver.page_source.find("사이즈 선택") == -1):
                 if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
                     Chrome_driver.get(link)
@@ -75,29 +71,34 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             action.move_to_element(purchase_btn).click().perform()
 
 
-        #===========================구매 페이지로 잘 넘어갔다 확인============================
-            
-            #======================= 1. no-access로 넘어갔나 확인           =====================
+        #===========================구매 페이지로 잘 넘어갔다 확인 ============================
+            #======================= 1. no-access로 넘어갔나 확인 ============================
             if(Chrome_driver.current_url.find('no-access') != -1):
                 Chrome_driver.get(link)
                 continue
-            #======================= 1. no-access로 넘어갔나 확인           =====================
-            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림=====================
+            #======================= 1. no-access로 넘어갔나 확인 ============================
+            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림 =====================
             temp_check_success = False
             while 1:
                 try:
+                    print("waiting_div")
                     waiting_div =  Chrome_driver.find_element(By.XPATH, \
-                        '/html/body/div[12]/div[2]')
+                        '/html/body/div[*]/div[2]')
+                    if(Chrome_driver.current_url.find("checkout") != -1):
+                        temp_check_success = True
+                        break
                 except:
                     temp_check_success = True
                     print("break")
                     break
-            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림=====================
+            #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림 =====================
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
             try:
+                print("temp_check_alert")
                 temp_check_alert = WebDriverWait(Chrome_driver, 0.7, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '/html/body/div[22]/div')))
-                get_size_mode = "random_size"
+                print("aaa")
+                get_size_mode = "select_size"
                 Chrome_driver.get(link)
                 continue
             except:
@@ -105,10 +106,12 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #======================= 3. "접속자가 많아 지연되고 있습니다"일 경우 새로고침 후 재시도====================
 
             #======================= 4. 한 번 더 no-access 체크 ============================
-            if(Chrome_driver.current_url.find('no-access') != -1):
-                continue
+            # if(Chrome_driver.current_url.find('no-access') != -1):
+            #     print("bbb")
+            #     continue
             #======================= 4. 한 번 더 no-access 체크 ============================
 
+            print("temp_check_success", temp_check_success)
 
             #======================= 4. 위에 해당하지 않으면 break ===========================
             if(temp_check_success == True):
@@ -189,7 +192,10 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             while 1:
                 try:
                     waiting_div =  WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[13]/div[1]')))
+                        '/html/body/div[*]/div[1]')))
+                    if(Chrome_driver.current_url.find("checkout") != -1):
+                        temp_check_success = True
+                        break
                 except:
                     temp_check_success = True    
                     print("break")
