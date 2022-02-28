@@ -10,11 +10,17 @@ def choose_address(Chrome_driver):
     # wait = WebDriverWait(Chrome_driver, 1,0.25)
     while 1:
         try:
-            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
             print("checking choose_address temp_div")
+            temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
             break
         except:
-            print("temp_div loading...")
+            #===================no-access 한 번 더 확인===================
+            if(Chrome_driver.current_url.find("no-access") != -1):
+                print("choose address (no-access)")
+                Chrome_driver.refresh()
+                sleep(1)
+            else:
+                print("temp_div loading...")
             continue
     while 1:
         try:

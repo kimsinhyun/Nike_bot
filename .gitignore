@@ -3,4 +3,4 @@ cookies/*
 __pycache__/
 nike_venv/
 cookie_with_SwitchOmega/
-proxy_config/*
+proxy_config/

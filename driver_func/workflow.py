@@ -12,8 +12,9 @@ from driver_func.choose_address_payment import choose_address, choose_payment
 
 def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
     #사이즈 고른 후 주소 선택 화면을 넘어가지 않을 시 5번 시도 (더 많이 하면 no access 뜸)
-    for i in range(10):
+    for i in range(30):
         goto_page(driver,LINK,SIZE,get_size_mode)
+        
         #사이즈 선택 및 구매버튼 클릭 완료 후(여기 부분의 예외처리는 goto_page 안에 구현되어 있음)
         #배송지 선택 창으로 넘어가는지 확인
         #no-access 혹은 사이즈 선택 창에서 성공적으로 실행되지 않았다면 random_size 모드로 사이즈 선택 총 5번 실행
@@ -24,7 +25,7 @@ def first_step(driver, LINK, SIZE, get_size_mode, job_condition="choose_size"):
             return job_condition
 
 def second_step(driver,job_condition="choose address"):
-    for i in range(10):
+    for i in range(30):
         choose_address(driver)
         #배송지 선택 화면으로 넘어온 후 payment선택 화면으로 정상적으로 이동하지 못했을 시
         #1. no-access이면 job_condition을 사이즈 선택으로 다시 돌아가게
@@ -46,7 +47,7 @@ def second_step(driver,job_condition="choose address"):
                 continue
 
 def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
-    for i in range(10):
+    for i in range(30):
         try:
             print("start third step")
             choose_payment(driver)
