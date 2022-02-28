@@ -11,7 +11,7 @@ def choose_address(Chrome_driver):
     while 1:
         try:
             temp_div = Chrome_driver.find_element(By.XPATH, '//*[@id="address"]/div[1]/div[1]/dl[1]/dd')
-            print("asdasd")
+            print("checking choose_address temp_div")
             break
         except:
             print("temp_div loading...")
@@ -55,12 +55,12 @@ def choose_payment(Chrome_driver):
             action.move_to_element(terms_of_conditions).click().perform()
             
             #----------------------------------------------결제하기 버튼----------------------------------------------
-            # sleep(0.5)
             complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
             sleep(0.1)
             action.move_to_element(complete_purchase).click().perform()
             break
         except:
+            print("re choose payment")
             Chrome_driver.refresh()
             sleep(1)
             continue

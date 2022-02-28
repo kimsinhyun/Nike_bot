@@ -17,7 +17,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
-        for i in range(10): 
+        for i in range(10):
             print("loop")
             if(Chrome_driver.page_source.find("사이즈 선택") == -1):
                 if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):

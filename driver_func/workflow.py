@@ -33,6 +33,7 @@ def second_step(driver,job_condition="choose address"):
         if(driver.current_url.find('checkout') == -1):
             #no-access가 뜨는 경우 사이즈 선택으로 다시 돌아가게 choose_size를 return
             if(driver.current_url.find('no-access') != -1):
+                print("choose_address -> payment (no-access)")
                 job_condition = 'choose_size'
                 return job_condition
         else:
