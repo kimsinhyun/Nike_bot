@@ -12,7 +12,7 @@ from driver_func.user_info import get_user_info
 from driver_func.show_ip import show_proxy_ip
 from driver_func.time_trigger import time_trigger
 from driver_func.workflow import first_step,second_step,thrid_step
-
+from driver_func.check_day import check_day
 
 
 user_info = pd.read_csv('../info.csv')
@@ -33,6 +33,12 @@ def main(user_num):
      show_proxy_ip(driver=driverinstance, hold_time=5, check_ip = check_ip)
 
      driverinstance.get("https://www.nike.com/kr/ko_kr/") 
+
+     if(~check_day()):
+          print("error")
+          return
+
+
      # save_cookie(driverinstance)
      time.sleep(3)
      if(check_logged_in(driverinstance,user_num) == False):
