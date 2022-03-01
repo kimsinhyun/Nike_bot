@@ -1,3 +1,4 @@
+import os 
 import zipfile
 import pandas as pd
 from concurrent import futures
@@ -67,17 +68,27 @@ def make_proxy_config(user_info,user_num):
 
     pluginfile = '../proxy_config/' + str(user_num) + 'th_proxy_auth_plugin.zip'
 
+    if not os.path.exists("../proxy_config/"):
+        try:
+            os.makedirs("../proxy_config/")
+        except: 
+            pass
     with zipfile.ZipFile(pluginfile, 'w') as zp:
         zp.writestr("manifest.json", manifest_json)
         zp.writestr("background.js", background_js)
+        
 
-with futures.ThreadPoolExecutor(max_workers=20) as executor: 
-    user_info = pd.read_csv('../info.csv')
-    user_num = len(user_info)
-    future_test_results = [ executor.submit(make_proxy_config, user_info,i) for i in range(user_num) ] # running same test 6 times, using test number as url
-    # future_test_results = [ executor.submit(make_proxy_config, 1)] # running same test 6 times, using test number as url
-    for future_test_result in future_test_results:
-        try:
-            test_result = future_test_result.result(timeout=None)# can use `timeout` to wait max seconds for each thread               
-        except: # can give a exception in some thread, but
-            print('thread generated an exception: {:0}'.format(Exception))
+def main():
+    with futures.ThreadPoolExecutor(max_workers=20) as executor: 
+        user_info = pd.read_csv('../info.csv')
+        user_num = len(user_info)
+        future_test_results = [ executor.submit(make_proxy_config, user_info,i) for i in range(user_num) ] # running same test 6 times, using test number as url
+        # future_test_results = [ executor.submit(make_proxy_config, 1)] # running same test 6 times, using test number as url
+        for future_test_result in future_test_results:
+            try:
+                test_result = future_test_result.result(timeout=None)# can use `timeout` to wait max seconds for each thread               
+            except: # can give a exception in some thread, but
+                print('thread generated an exception: {:0}'.format(Exception))
+
+if __name__ == "__main__":
+    main()

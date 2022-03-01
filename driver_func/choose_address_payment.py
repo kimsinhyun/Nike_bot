@@ -53,6 +53,7 @@ def choose_payment(Chrome_driver):
                         action.move_to_element(payment).click().perform()
                 except:
                     action.move_to_element(payment).click().perform()
+                    break
             #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
 
             #------------------------------------구매 동의 체크 박스-----------------------------------

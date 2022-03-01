@@ -21,7 +21,14 @@ input_hour = input("set hour: ")
 input_min = input("set min: ")
 check_ip = input("ip 확인 (건너뛰기: 'press any key' ; 확인하기: 'enter y or yes')")
 
+
+
 def main(user_num):
+
+     if(check_day() == False):
+          print("error")
+          return
+
      #몇 개의 계정을 돌릴건지 확인 -> 쓰레드 갯수 때문에 필요함
      ID, PW, PROXY, LINK, SIZE,proxy_dict =  get_user_info(user_info, user_num)
 
@@ -34,9 +41,7 @@ def main(user_num):
 
      driverinstance.get("https://www.nike.com/kr/ko_kr/") 
 
-     if(~check_day()):
-          print("error")
-          return
+     
 
 
      # save_cookie(driverinstance)
@@ -66,10 +71,14 @@ def main(user_num):
      temp = input("아무 키를 눌러서 종료해주세요 ")
      temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
 
-with futures.ThreadPoolExecutor(max_workers=20) as executor: 
-     future_test_results = [ executor.submit(main, i) for i in range(user_num) ] # running same test 6 times, using test number as url
-     for future_test_result in future_test_results: 
-          try:        
-               test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
-          except: # can give a exception in some thread, but 
-               print('thread generated an exception: {:0}'.format(Exception))
+def main():
+     with futures.ThreadPoolExecutor(max_workers=20) as executor: 
+          future_test_results = [ executor.submit(main, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+          for future_test_result in future_test_results: 
+               try:        
+                    test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
+               except: # can give a exception in some thread, but 
+                    print('thread generated an exception: {:0}'.format(Exception))
+
+if __name__ == "__main__":
+    main()
