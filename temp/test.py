@@ -23,7 +23,7 @@ check_ip = input("ip 확인 (건너뛰기: 'press any key' ; 확인하기: 'ente
 
 
 
-def main(user_num):
+def init(user_num):
 
      if(check_day() == False):
           print("error")
@@ -73,7 +73,7 @@ def main(user_num):
 
 def main():
      with futures.ThreadPoolExecutor(max_workers=20) as executor: 
-          future_test_results = [ executor.submit(main, i) for i in range(user_num) ] # running same test 6 times, using test number as url
+          future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
           for future_test_result in future_test_results: 
                try:        
                     test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
