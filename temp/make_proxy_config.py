@@ -66,11 +66,11 @@ def make_proxy_config(user_info,user_num):
     );
     """ % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
 
-    pluginfile = '../proxy_config/' + str(user_num) + 'th_proxy_auth_plugin.zip'
+    pluginfile = './proxy_config/' + str(user_num) + 'th_proxy_auth_plugin.zip'
 
-    if not os.path.exists("../proxy_config/"):
+    if not os.path.exists("./proxy_config/"):
         try:
-            os.makedirs("../proxy_config/")
+            os.makedirs("./proxy_config/")
         except: 
             pass
     with zipfile.ZipFile(pluginfile, 'w') as zp:
