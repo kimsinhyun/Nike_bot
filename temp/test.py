@@ -1,6 +1,6 @@
 import warnings
 
-warnings.filterwarnings( 'ignore' )
+
 
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -19,6 +19,7 @@ from driver_func.check_day import check_day
 
 
 
+warnings.filterwarnings(action='ignore')
 
 user_info = pd.read_csv('info.csv')
 user_num = len(user_info)
@@ -77,7 +78,7 @@ def init(user_num):
      temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
 
 def main():
-     with futures.ThreadPoolExecutor(max_workers=20) as executor: 
+     with futures.ThreadPoolExecutor(max_workers=50) as executor: 
           future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
           for future_test_result in future_test_results: 
                try:        

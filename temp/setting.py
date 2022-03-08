@@ -76,7 +76,8 @@ class WebDriver(DriverOptions,object):
           }
           webdriver.DesiredCapabilities.CHROME['acceptSslCerts'] = True
           # self.options.add_extension("./extension_2_0_0_0.crx")
-          path = ".\chromedriver.exe"
+          path = str(os.path.abspath(os.getcwd())) + '\chromedriver.exe'
+          # path = ".\chromedriver.exe"
           driver = webdriver.Chrome(path, options=self.options)
           driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
           driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {

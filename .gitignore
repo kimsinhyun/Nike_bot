@@ -6,3 +6,6 @@ sinhyun/
 cookie_with_SwitchOmega/
 proxy_config/*
 *.zip
+build/
+dist/
+*.spec

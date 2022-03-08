@@ -15,7 +15,7 @@ def check_time(hour, minute,user_num):
 
     if(user_num == 0):
         print(nav_hour, ":", nav_min, ":", nav_sec)
-    if (nav_hour == hour) and (nav_min == minute):
+    if (nav_hour >= hour) and (nav_min >= minute):
         return True
     else: 
         return False
