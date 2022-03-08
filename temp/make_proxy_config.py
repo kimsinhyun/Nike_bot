@@ -80,7 +80,7 @@ def make_proxy_config(user_info,user_num):
 
 def main():
     with futures.ThreadPoolExecutor(max_workers=20) as executor: 
-        user_info = pd.read_csv('../info.csv')
+        user_info = pd.read_csv('./info.csv')
         user_num = len(user_info)
         future_test_results = [ executor.submit(make_proxy_config, user_info,i) for i in range(user_num) ] # running same test 6 times, using test number as url
         # future_test_results = [ executor.submit(make_proxy_config, 1)] # running same test 6 times, using test number as url

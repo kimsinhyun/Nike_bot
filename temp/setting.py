@@ -2,6 +2,15 @@ import os
 import pickle
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import sys
+
+if  getattr(sys, 'frozen', False): 
+    chromedriver_path = os.path.join(sys._MEIPASS, "chromedriver.exe")
+    driver = webdriver.Chrome(chromedriver_path)
+else:
+    driver = webdriver.Chrome()
+
+
 class Spoofer(object):
      def __init__(self, user_proxy, country_id=['US'], rand=True, anonym=True,):
           self.user_proxy = user_proxy
@@ -20,6 +29,7 @@ class DriverOptions(object):
         cookie_dir = str(os.path.abspath(os.getcwd())).replace('\\temp','') + "\\cookies\\" +str(user_num) + '\Chrome_cookie'
         self.proxy_address = user_proxy.split(":")[0] + ":" + user_proxy.split(":")[1]
         self.options = Options()
+        self.options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.options.add_argument(f"--user-data-dir={cookie_dir}") 
         self.options.add_argument('--no-sandbox')
         self.options.add_argument('--start-maximized')
@@ -34,7 +44,7 @@ class DriverOptions(object):
         self.helperSpoofer = Spoofer(self.proxy_address)
         self.options.add_argument("user-agent={}".format("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36"))
         # self.options.add_argument(f'--proxy-server={self.proxy_address}')
-        self.options.add_extension('../proxy_config/' + str(user_num) + 'th_proxy_auth_plugin.zip')
+        self.options.add_extension('proxy_config/' + str(user_num) + 'th_proxy_auth_plugin.zip')
 class WebDriver(DriverOptions,object):
      def __init__(self,user_proxy,user_num, path="",):
           DriverOptions.__init__(self,user_proxy,user_num)
@@ -63,7 +73,7 @@ class WebDriver(DriverOptions,object):
           }
           webdriver.DesiredCapabilities.CHROME['acceptSslCerts'] = True
           # self.options.add_extension("./extension_2_0_0_0.crx")
-          path = "..\98\chromedriver.exe"
+          path = ".\chromedriver.exe"
           driver = webdriver.Chrome(path, options=self.options)
           driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
           driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {

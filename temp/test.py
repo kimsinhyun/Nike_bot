@@ -6,7 +6,7 @@ import time
 from concurrent import futures
 import pandas as pd
 
-from temp.setting import WebDriver
+from setting import WebDriver
 from driver_func.check_login import check_logged_in, login
 from driver_func.user_info import get_user_info
 from driver_func.show_ip import show_proxy_ip
@@ -15,7 +15,9 @@ from driver_func.workflow import first_step,second_step,thrid_step
 from driver_func.check_day import check_day
 
 
-user_info = pd.read_csv('../info.csv')
+
+
+user_info = pd.read_csv('info.csv')
 user_num = len(user_info)
 input_hour = input("set hour: ")
 input_min = input("set min: ")
@@ -45,7 +47,7 @@ def init(user_num):
 
 
      # save_cookie(driverinstance)
-     time.sleep(3)
+     # time.sleep(3)
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
      
@@ -79,6 +81,8 @@ def main():
                     test_result = future_test_result.result(timeout=None) # can use `timeout` to wait max seconds for each thread               
                except: # can give a exception in some thread, but 
                     print('thread generated an exception: {:0}'.format(Exception))
+
+     time.sleep(10)
 
 if __name__ == "__main__":
     main()
