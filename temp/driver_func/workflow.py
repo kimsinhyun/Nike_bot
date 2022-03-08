@@ -52,9 +52,9 @@ def second_step(driver,job_condition="choose address"):
                 continue
 
 def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_payment", ):
+    print("start third step")
     for i in range(30):
         try:
-            print("start third step")
             choose_payment(driver)
         except:
             print('here??')
@@ -66,10 +66,11 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
             return "choose_size"
         else:
             # 1. 주문 생성 오류 감지 시
-            if(driver.page_source.find("생성 오류") != -1):
-                print("생성 오류")
+            if(driver.page_source.find("잠시후 주문을") != -1):
+                print("잠시후 주문을")
                 driver.refresh()
-                sleep(2)
+                print("restart third step!!")
+                # sleep(2)
                 continue
             try:
                 qr_code = WebDriverWait(driver, 10, 0.5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
