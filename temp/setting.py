@@ -4,11 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import sys
 
-if  getattr(sys, 'frozen', False): 
-    chromedriver_path = os.path.join(sys._MEIPASS, "chromedriver.exe")
-    driver = webdriver.Chrome(chromedriver_path)
-else:
-    driver = webdriver.Chrome()
+# if  getattr(sys, 'frozen', False): 
+#     chromedriver_path = os.path.join(sys._MEIPASS, "chromedriver.exe")
+#     driver = webdriver.Chrome(chromedriver_path)
+# else:
+#     driver = webdriver.Chrome()
 
 
 class Spoofer(object):
