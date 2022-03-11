@@ -59,15 +59,23 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             try:
                 print('1111')
                 size_element = Chrome_driver.find_element(By.XPATH,\
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
-                print('2222')
+                    # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
+                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[text()=' + size  + ']')
+                print(size_element.get_attribute("class"))
+                if(size_element.get_attribute("class") == "sd-out"):
+                    print('choose random size 1')
+                    random_size = random.randint(0,len(size_elements)-1)
+                    size_element = size_elements[random_size]    
             except:
+                print('choose random size 2')
                 random_size = random.randint(0,len(size_elements)-1)
                 size_element = size_elements[random_size]
             action.move_to_element(size_element).click().perform()
+            #너무 빨라서 사이즈 클릭이 잘 안됐을 경우 다시 한 번 더 클릭
+            if(size_element.get_attribute("class") == "list  disabled"):
+                action.move_to_element(size_element).click().perform()
             purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
             action.move_to_element(purchase_btn).click().perform()
-
 
         #===========================구매 페이지로 잘 넘어갔다 확인 ============================
             #======================= 1. no-access로 넘어갔나 확인 ============================
@@ -79,7 +87,6 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             temp_check_success = False
             while 1:
                 try:
-                    print("waiting_div")
                     waiting_div =  Chrome_driver.find_element(By.XPATH, \
                         '/html/body/div[*]/div[2]')
                     if(Chrome_driver.current_url.find("checkout") != -1):
