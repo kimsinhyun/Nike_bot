@@ -179,7 +179,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #===========================구매 페이지로 잘 넘어갔다 확인============================
             
             # #======================= 1. no-access로 넘어갔나 확인           =====================
-            if(Chrome_driver.current_url.find('checkout') == -1):
+            if(Chrome_driver.current_url.find('no-access') != -1):
                 Chrome_driver.get(link)
                 continue
             # #======================= 1. no-access로 넘어갔나 확인           =====================

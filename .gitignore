@@ -5,6 +5,7 @@ nike_venv/
 sinhyun/
 cookie_with_SwitchOmega/
 proxy_config/*
+cookies/*
 *.zip
 build/
 dist/
