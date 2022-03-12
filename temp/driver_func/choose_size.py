@@ -170,17 +170,8 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     size_element = size_elements[random_size]
 
                 action.move_to_element(size_element).click().perform()
-                sleep(0.1)
+                sleep(0.05)
 
-                # #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
-                # try:   #막 발매됐을 때랑 이미 전부터 올라와져있는 페이지는 화면 구성이 조금 다르기 때문에 예외처리
-                #     temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
-                #         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div/h1')))
-                # except:
-                #     temp_element = wait.until(EC.presence_of_element_located((By.XPATH,\
-                #         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[1]/div[1]/div/h1')))
-                # action.move_to_element(temp_element).click().perform()
-                # #===================구매 버튼 누르기 전에 아무 곳 클릭 (여기서는 상품 이름 명 클릭)===================
                 purchase_btn = WebDriverWait(Chrome_driver, 1, 0.25).until(EC.presence_of_element_located((By.XPATH, \
                         '//*[@id="btn-buy"]/span')))
                 action.move_to_element(purchase_btn).click().perform()
@@ -188,9 +179,9 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #===========================구매 페이지로 잘 넘어갔다 확인============================
             
             # #======================= 1. no-access로 넘어갔나 확인           =====================
-            # if(Chrome_driver.current_url.find('checkout') == -1):
-            #     Chrome_driver.get(link)
-            #     continue
+            if(Chrome_driver.current_url.find('checkout') == -1):
+                Chrome_driver.get(link)
+                continue
             # #======================= 1. no-access로 넘어갔나 확인           =====================
             #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림(launch 에서는 뺑글뻉글 돌아가는 div)=====================
             temp_check_success = False

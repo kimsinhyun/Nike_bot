@@ -36,6 +36,7 @@ def choose_address(Chrome_driver):
 def choose_payment(Chrome_driver):
     wait = WebDriverWait(Chrome_driver, 6,0.25)
     while 1:
+        print("choose_payment")
         try:
             action = ActionChains(Chrome_driver)
             #-----------------------------------결제 방식 클릭(아직은 카카오페이만 구현되어 있음(추후에 추가 예정)-------------------------------------------
