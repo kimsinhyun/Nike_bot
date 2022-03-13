@@ -22,7 +22,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             if(Chrome_driver.page_source.find("사이즈 선택") == -1):
                 if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
                     Chrome_driver.get(link)
-                    sleep(1)
+                    # sleep(1)
             else:
                 break
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================

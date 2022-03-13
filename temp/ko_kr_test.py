@@ -67,6 +67,7 @@ def start_ko_kr(user_num, ko_kr_link, driverinstance):
      temp = input("아무 키를 눌러서 종료해주세요 ")
      temp_1 = input("정말 종료 하시겠습니까? (아무 키 입력)")
      return
+     
 def main():
      Webdriver_list = [0 for i in range(user_num)]
      with futures.ThreadPoolExecutor(max_workers=50) as executor: 

@@ -1,0 +1,14 @@
+.ipynb_checkpoints/
+cookies/*
+__pycache__/
+nike_venv/
+sinhyun/
+cookie_with_SwitchOmega/
+proxy_config/*
+proxy_config/
+cookies/*
+cookies/
+*.zip
+build/
+dist/
+*.spec
