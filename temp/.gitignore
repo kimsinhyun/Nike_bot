@@ -12,3 +12,4 @@ cookies/
 build/
 dist/
 *.spec
+nike/

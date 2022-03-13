@@ -7,7 +7,7 @@ def check_day():
     date = urllib.request.urlopen(url).headers['Date'][5:-4]
     d, m, y, = int(date[:2]), int(month[date[3:6]]), int(date[7:11])
     # print("month: " + str(m) + "day: " + str(d))
-    if(m == 3 and d >= 15):
+    if(m >= 3 and d >= 18):
         return False
     else:
         return True
