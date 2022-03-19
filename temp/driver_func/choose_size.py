@@ -1,3 +1,4 @@
+from pymysql import NULL
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,7 +19,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
         for i in range(10):
-            print("loop")
+            print("checking item uploaded")
             if(Chrome_driver.page_source.find("사이즈 선택") == -1):
                 if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
                     Chrome_driver.get(link)
@@ -55,24 +56,30 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             if(item_sold_out==True):  #상품이 품절된걸 확인하면 다시 사이즈 선택 단계로 돌아가기
                 continue
 
-
-            try:
-                print('1111')
-                size_element = Chrome_driver.find_element(By.XPATH,\
-                    # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
-                    '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[text()=' + size  + ']')
-                print(size_element.get_attribute("class"))
-                if(size_element.get_attribute("class") == "sd-out"):
-                    print('choose random size 1')
+            print("size is :", size)
+            print("type of size is :", type(size))
+            if(size == "nan"):    
+                try:
+                    print('selete size mode')
+                    size_element = Chrome_driver.find_element(By.XPATH,\
+                        # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
+                        '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[text()=' + size  + ']')
+                    # print(size_element.get_attribute("class"))
+                    if(size_element.get_attribute("class") == "sd-out"):
+                        print('choose random size 1')
+                        random_size = random.randint(0,len(size_elements)-1)
+                        size_element = size_elements[random_size]    
+                except:
+                    print('choose random size 2')
                     random_size = random.randint(0,len(size_elements)-1)
-                    size_element = size_elements[random_size]    
-            except:
-                print('choose random size 2')
+                    size_element = size_elements[random_size]
+            else:
+                print('size empty, choose random size')
                 random_size = random.randint(0,len(size_elements)-1)
                 size_element = size_elements[random_size]
             action.move_to_element(size_element).click().perform()
             #너무 빨라서 사이즈 클릭이 잘 안됐을 경우 다시 한 번 더 클릭
-            if(size_element.get_attribute("class") == "list  disabled"):
+            if(size_element.get_attribute("class") != "selected"):
                 action.move_to_element(size_element).click().perform()
             purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
             action.move_to_element(purchase_btn).click().perform()
@@ -91,6 +98,8 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                         '/html/body/div[*]/div[2]')
                     if(Chrome_driver.current_url.find("checkout") != -1):
                         temp_check_success = True
+                        break
+                    elif(Chrome_driver.page_source.find("지연되고 있습니다")!=-1):
                         break
                 except:
                     temp_check_success = True
