@@ -44,6 +44,9 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
                 if len(size_elements) > 0:
                     break
+                elif(Chrome_driver.current_url.find("no-access")!=-1):
+                    item_sold_out = True
+                    break
                 else:
                     temp=1
                     print("품절되었습니다")
