@@ -26,8 +26,8 @@ class Spoofer(object):
 class DriverOptions(object):
      def __init__(self, user_proxy,user_num):
         # cookie_dir = "..\\cookies\\" +str(user_num) + '\\Chrome_cookie\\Default'
-     #    C:\Users\Administrator\Desktop\sinhyun code\nike\dist\cookies\4\Chrome_cookie
-     #    C:\Users\Administrator\Desktop\sinhyun code\nike\temp\dist\cookies\4\Chrome_cookie
+        # C:\Users\Administrator\Desktop\sinhyun code\nike\dist\cookies\4\Chrome_cookie
+        # C:\Users\Administrator\Desktop\sinhyun code\nike\temp\dist\cookies\4\Chrome_cookie
         cookie_dir = str(os.path.abspath(os.getcwd())) + "\\cookies\\" +str(user_num) + '\Chrome_cookie'
         print("cookie_dir: " + cookie_dir)
         self.proxy_address = user_proxy.split(":")[0] + ":" + user_proxy.split(":")[1]
@@ -39,9 +39,10 @@ class DriverOptions(object):
         self.options.add_argument('--single-process')
         self.options.add_argument('--disable-dev-shm-usage')
         # self.options.add_argument("--incognito")
-        self.options.add_argument('--disable-blink-features=AutomationControlled')
+     #    self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_experimental_option('useAutomationExtension', False)
+        self.options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_argument("disable-infobars")
         self.helperSpoofer = Spoofer(self.proxy_address)

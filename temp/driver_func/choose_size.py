@@ -1,3 +1,4 @@
+from asyncio import wait_for
 from pymysql import NULL
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,14 +19,15 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
     #==============================url에 "launch"가 없을 때 (스텔스 구매 페이지)==============================
     if(link.find('launch') == -1):
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
-        for i in range(10):
+        for i in range(30):
             print("checking item uploaded")
-            if(Chrome_driver.page_source.find("사이즈 선택") == -1):
+            if(Chrome_driver.page_source.find("사이즈 선택") != -1):
+                break
+            else:
                 if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
                     Chrome_driver.get(link)
                     # sleep(1)
-            else:
-                break
+            
         #==========================아직 발매가 시작 안됐을 때 계속 새로고침==========================
 
         action = ActionChains(Chrome_driver)
@@ -37,11 +39,14 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             #=======================첫 시도에는 희망하는 사이즈로 시도 (select_size mode)==============================
             item_sold_out = False
             while 1:
+                print("waitting for size list")
                 size_elements = Chrome_driver.find_elements(By.XPATH, \
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
                 if len(size_elements) > 0:
                     break
                 else:
+                    temp=1
+                    print("품절되었습니다")
                     #활성화 된 사이즈가 없으면 상품이 품절되었는지 확인
                     try:
                         check_item_sold_out = Chrome_driver.find_element(By.XPATH, \
@@ -56,11 +61,11 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             if(item_sold_out==True):  #상품이 품절된걸 확인하면 다시 사이즈 선택 단계로 돌아가기
                 continue
 
-            print("size is :", size)
-            print("type of size is :", type(size))
-            if(size == "nan"):    
+            # print("size is :", size)
+            # print("type of size is :", type(size))
+            if(size != "nan"):    
                 try:
-                    print('selete size mode')
+                    print('selecte size mode')
                     size_element = Chrome_driver.find_element(By.XPATH,\
                         # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
                         '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[text()=' + size  + ']')
@@ -87,7 +92,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
         #===========================구매 페이지로 잘 넘어갔다 확인 ============================
             #======================= 1. no-access로 넘어갔나 확인 ============================
             if(Chrome_driver.current_url.find('no-access') != -1):
-                Chrome_driver.get(link)
+                # Chrome_driver.get(link)
                 continue
             #======================= 1. no-access로 넘어갔나 확인 ============================
             #======================= 2. 처리중이라는 화면이 끝날 때까지 기다림 =====================
@@ -110,10 +115,11 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             try:
                 print("temp_check_alert")
                 temp_check_alert = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[22]/div')))
-                print("aaa")
+                        '/html/body/div[*]/div')))
+                if(Chrome_driver.current_url.find("checkout") != -1):
+                    break
                 get_size_mode = "select_size"
-                Chrome_driver.get(link)
+                # Chrome_driver.get(link)
                 continue
             except:
                 pass
@@ -142,13 +148,15 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
     #==============================url에 "launch"가 있을 때 (스니커즈 구매 페이지) 위와 비슷, 설명 생략==============================
     else:
         #----------------------아직 발매가 시작 안됐을 때--------------------
-        for i in range(10): 
-            if(Chrome_driver.page_source.find("사이즈 선택") == -1):
-                if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
+        for i in range(30): 
+            if(Chrome_driver.page_source.find("사이즈 선택") != -1):
+                print("item uploaded")
+                break
+            else:
+                if(Chrome_driver.page_source.find("Coming Soon") != -1):
+                    print("Coming soon")
                     Chrome_driver.get(link)
                     sleep(1)
-            else:
-                break
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
         for i in range(20):
@@ -166,12 +174,14 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     continue
             #============= Buy 버튼이 생길 때까지 기다리기==================
             if(get_size_mode == "select_size"):
-                size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
+                # size_list = wait.until(EC.presence_of_element_located((By.XPATH, \
+                #         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')))
+                size_list = Chrome_driver.find_element(By.XPATH, \
+                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/a/span')
                 action.move_to_element(size_list).click().perform()
                 try:
-                    size_element = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]/a/span[text()="' + size  + '"]')))
+                    size_element = Chrome_driver.find_element(By.XPATH, \
+                        '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]/a/span[text()=' + size  + ']')
                 except:
                     size_elements = Chrome_driver.find_elements(By.XPATH, \
                         '/html/body/div[1]/div/div[1]/div[2]/div[1]/section/div[2]/aside/div[2]/div/div/div/div/form/div/div[1]/ul/li[@class="list"]')
@@ -210,9 +220,11 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             try:
                 print("1")
                 comfirm_btn = WebDriverWait(Chrome_driver, 0.5, 0.25).until(EC.presence_of_element_located((By.XPATH, \
-                        '/html/body/div[21]/div/div/div[2]/button')))
+                        '/html/body/div[*]/div/div/div[2]/button')))
+                if(Chrome_driver.current_url.find("checkout") != -1):
+                    break
                 print("2")
-                action.move_to_element(comfirm_btn).click().perform()
+                # action.move_to_element(comfirm_btn).click().perform()
                 continue
             except:
                 if(Chrome_driver.current_url.find("checkout") != -1):

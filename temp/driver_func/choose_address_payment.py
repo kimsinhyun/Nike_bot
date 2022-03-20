@@ -17,8 +17,7 @@ def choose_address(Chrome_driver):
             #===================no-access 한 번 더 확인===================
             if(Chrome_driver.current_url.find("no-access") != -1):
                 print("choose address (no-access)")
-                Chrome_driver.refresh()
-                sleep(1)
+                break
             else:
                 print("temp_div loading...")
             continue
@@ -58,14 +57,18 @@ def choose_payment(Chrome_driver):
             #-----------------------------------만약 클릭이 너무 빨라서 클릭이 안됐으면 다시 클릭--------------------------
 
             #------------------------------------구매 동의 체크 박스-----------------------------------
-            terms_of_conditions = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')))
+            terms_of_conditions = Chrome_driver.find_element(By.XPATH,'//*[@id="payment-review"]/div[1]/ul/li[2]/form/div/span/label/i')
             sleep(0.1)
             action.move_to_element(terms_of_conditions).click().perform()
-            
             #----------------------------------------------결제하기 버튼----------------------------------------------
-            complete_purchase = wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="complete_checkout"]/button')))
+            complete_purchase = Chrome_driver.find_element(By.XPATH,'//*[@id="complete_checkout"]/button')
             sleep(0.1)
             action.move_to_element(complete_purchase).click().perform()
+            #만약 너무 빨라서 결제하기 버튼이 클릭이 안됐으면 다시 한 번 더 클릭
+            if(Chrome_driver.find_element(By.XPATH, "/html/body/div[13]/div[1]") == -1):
+                print("re click purchase button")
+                action.move_to_element(complete_purchase).click().perform()
+
             break
         except:
             print("re choose payment")

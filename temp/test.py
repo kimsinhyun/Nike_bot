@@ -45,11 +45,6 @@ def init(user_num):
 
      driverinstance.get("https://www.nike.com/kr/ko_kr/") 
 
-     
-
-
-     # save_cookie(driverinstance)
-     # time.sleep(3)
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
      
