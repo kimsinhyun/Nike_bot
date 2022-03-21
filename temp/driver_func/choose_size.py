@@ -44,7 +44,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
                 if len(size_elements) > 0:
                     break
-                elif(Chrome_driver.current_url.find("no-access")!=-1):
+                elif((Chrome_driver.current_url.find("no-access")!=-1) or (Chrome_driver.current_url.find("singleship")!=-1)):
                     item_sold_out = True
                     break
                 else:
@@ -60,6 +60,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
                         break
                     except:
                         # break
+                        print("sth error")
                         continue         
             if(item_sold_out==True):  #상품이 품절된걸 확인하면 다시 사이즈 선택 단계로 돌아가기
                 continue
