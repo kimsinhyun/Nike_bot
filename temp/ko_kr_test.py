@@ -69,6 +69,7 @@ def start_ko_kr(user_num, ko_kr_link, driverinstance):
      return
      
 def main():
+     print(user_info)
      Webdriver_list = [0 for i in range(user_num)]
      with futures.ThreadPoolExecutor(max_workers=50) as executor: 
           future_test_results = [ executor.submit(init, i) for i in range(user_num) ] # running same test 6 times, using test number as url
