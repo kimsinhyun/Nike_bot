@@ -65,10 +65,16 @@ def choose_payment(Chrome_driver):
             sleep(0.1)
             action.move_to_element(complete_purchase).click().perform()
             #만약 너무 빨라서 결제하기 버튼이 클릭이 안됐으면 다시 한 번 더 클릭
-            if(Chrome_driver.find_element(By.XPATH, "/html/body/div[13]/div[1]") == -1):
-                print("re click purchase button")
-                action.move_to_element(complete_purchase).click().perform()
+            # if(Chrome_driver.find_element(By.XPATH, "/html/body/div[13]/div[1]") == -1):
+            #     print("re click purchase button")
+            #     action.move_to_element(complete_purchase).click().perform()
 
+            #한 번 더 클릭!
+            sleep(0.5)
+            try:
+                action.move_to_element(complete_purchase).click().perform()
+            except:
+                pass
             break
         except:
             print("re choose payment")
