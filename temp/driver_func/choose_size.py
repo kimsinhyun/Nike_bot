@@ -30,8 +30,8 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
         #==========================최대 100번 재시도==================
         for i in range(100):
             #======================5번 째 시도마다 한 번씩 새로고침=================
-            if((i % 5 == 0) & (i != 0)):
-                Chrome_driver.get(link)
+            # if((i % 5 == 0) & (i != 0)):
+            #     Chrome_driver.get(link)
 
             #=======================사이즈 element 들이 활성화 될 때까지 대기==============================
             Chrome_driver, size_elements = wait_size_elements_ko_kr(Chrome_driver, link)
@@ -46,6 +46,7 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             # Chrome_driver, size_select_success = check_size_select_success(Chrome_driver)
 
             if(success == False):
+                print("retry select size")
                 Chrome_driver.get(link)
                 continue
             else:

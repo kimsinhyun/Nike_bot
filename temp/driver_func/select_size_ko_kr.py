@@ -14,7 +14,7 @@ def select_size_ko_kr(Chrome_driver, size_elements, size):
             print('selecte size mode')
             size_element = Chrome_driver.find_element(By.XPATH,\
                 # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
-                '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[text()=' + size  + ']')
+                '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[()=' + size  + ']')
             if(size_element.get_attribute("class") == "sd-out"):
                 print('choose random size 1')
                 random_size = random.randint(0,len(size_elements)-1)
