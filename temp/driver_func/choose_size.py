@@ -40,12 +40,12 @@ def goto_page(Chrome_driver, link, size, get_size_mode):
             Chrome_driver = select_size_ko_kr(Chrome_driver, size_elements, size)
 
             #===========================우선 처리 중이라는 div가 끝날 때까지 기다림============================
-            Chrome_driver = detect_progress_div(Chrome_driver)
+            Chrome_driver, success = detect_progress_div(Chrome_driver)
 
             #===========================no-access로 갔는지 혹은 "지연 되고 있습니다" or "재고가 없습니다" 일 경우 다시 사이즈 선택으로 재시도============================
-            Chrome_driver, size_select_success = check_size_select_success(Chrome_driver)
+            # Chrome_driver, size_select_success = check_size_select_success(Chrome_driver)
 
-            if(size_select_success == False):
+            if(success == False):
                 Chrome_driver.get(link)
                 continue
             else:

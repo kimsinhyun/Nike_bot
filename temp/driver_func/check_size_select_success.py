@@ -1,13 +1,5 @@
-
-from asyncio import wait_for
-from pymysql import NULL
 from selenium.webdriver.common.by import By 
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver import ActionChains
 
-from time import sleep
-import random
 def check_size_select_success(Chrome_driver):
     #check-out 페이지로 잘 들어왔을 경우
     if(Chrome_driver.current_url.find("checkout") != -1):
@@ -21,7 +13,7 @@ def check_size_select_success(Chrome_driver):
     else:
         try:
             popup_div = Chrome_driver.find_element(By.XPATH, \
-                '/html/body/div[position() > 17 and position() < 28]')
+                '/html/body/div[position() > 21 and position() < 24]')
             print("popup detected, choose size again")
         except:
             pass

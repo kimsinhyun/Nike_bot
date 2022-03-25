@@ -1,13 +1,17 @@
 
 from selenium.webdriver.common.by import By 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from time import sleep
 
 def wait_size_elements_ko_kr(Chrome_driver,link):
     while 1:
         print("waitting for size list")
-        size_elements = Chrome_driver.find_elements(By.XPATH, \
-            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
+        # wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
+        size_elements = WebDriverWait(Chrome_driver,1,0.25).until(EC.presence_of_all_elements_located(By.XPATH, '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]'))
+        # find_elements(By.XPATH, \
+        #     '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
         #사이즈 리스트가 로딩 됐으면 elements 리턴 후 사이즈 선택 문구
         if len(size_elements) > 0:
             print("start choose size")
