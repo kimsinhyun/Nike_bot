@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from time import sleep
 
-def wait_size_elements_ko_kr(Chrome_driver,link):
+def wait_size_elements_ko_kr(Chrome_driver,link, retry_time):
     while 1:
         print("waitting for size list")
         # wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/header/div/div[1]/div/div/ul/li[3]/a')))
@@ -29,7 +29,7 @@ def wait_size_elements_ko_kr(Chrome_driver,link):
                     "/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[4]/div/div/div[1]/div/span") #품절 되었을 경우 5초마다 계속 확인
                 Chrome_driver.get(link)  
                 print("품절되었습니다")
-                sleep(5)
+                sleep(retry_time)
                 continue
             #아직 selectable 하지 않는 상태
             except:

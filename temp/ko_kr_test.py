@@ -22,6 +22,7 @@ warnings.filterwarnings(action='ignore')
 user_info = pd.read_csv('info.csv')
 user_num = len(user_info)
 check_ip = input("ip 확인 (건너뛰기: 'press any key' ; 확인하기: 'enter y or yes')")
+retry_time = int(input("set retry time(second): "))
 
 def init(user_num):
      ID, PW, PROXY, LINK, SIZE,proxy_dict =  get_user_info(user_info, user_num)
@@ -53,7 +54,7 @@ def start_ko_kr(user_num, ko_kr_link, driverinstance):
                #첫 시도는 희망하는 사이즈로 선택
                get_size_mode = "select_size"
                #first_step -> 사이즈 서택 페이지, 성공하면 choose_address를 return 받아서 다음 스텝으로 넘어간다.
-               job_condition = first_step(driverinstance, ko_kr_link, SIZE, get_size_mode, job_condition)
+               job_condition = first_step(driverinstance, ko_kr_link, SIZE, get_size_mode, retry_time, job_condition)
 
           if(job_condition=="choose address"):
                job_condition = second_step(driverinstance,job_condition)

@@ -11,7 +11,7 @@ def select_size_ko_kr(Chrome_driver, size_elements, size):
     #사용자가 희망 size를 입력했었다면 
     if(size != "nan"):    
         try:
-            print('selecte size mode')
+            print('select size mode')
             size_element = Chrome_driver.find_element(By.XPATH,\
                 # '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[@typename="' + size + '" and not(contains(@disabled))]')
                 '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[*]/label[()=' + size  + ']')

@@ -8,3 +8,6 @@ def checking_item_uploaded(Chrome_driver, link):
             if(Chrome_driver.page_source.find("더 이상 확인 할 수 없는") != -1):
                 Chrome_driver.get(link)
                 print("item not uploaded yet")
+            elif(Chrome_driver.page_source.find("Coming Soon") != -1):
+                print("item not uploaded yet")
+                Chrome_driver.get(link)
