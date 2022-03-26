@@ -13,9 +13,10 @@ def check_size_select_success(Chrome_driver):
     else:
         try:
             popup_div = Chrome_driver.find_element(By.XPATH, \
-                '/html/body/div[position() = 22 or position() = 23]')
+                '/html/body/div[position() > 20 and position() = 24]')
             print("popup detected, choose size again")
         except:
+            print("herererere")
             pass
         return Chrome_driver, False
 
