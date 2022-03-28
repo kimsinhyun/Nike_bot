@@ -15,8 +15,8 @@ def detect_progress_div(Chrome_driver):
             #hidden div check하기
             try:
                 hidden_div_1 = Chrome_driver.find_element(By.XPATH, \
-                '/html/body/div[position() > 20 and position() < 24]')
-                print("pop up detected.")
+                '/html/body/div[position() = 22 or position() = 23]')
+                print("111pop up detected.")
                 return Chrome_driver, False
             except:
                 print("herer!!!.")
@@ -32,11 +32,15 @@ def detect_progress_div(Chrome_driver):
                 print("no-access detected")
                 return Chrome_driver, False
             else:
-                try:
-                    hidden_div_1 = Chrome_driver.find_element(By.XPATH, \
-                    '/html/body/div[position() > 20 and position() < 24]')
-                    print("pop up detected.")
-                    return Chrome_driver, False
-                except:
-                    print('hrer!!!222')
-                    pass
+                if(Chrome_driver.current_url.find("checkout") == -1):
+                    try:
+                        hidden_div_1 = Chrome_driver.find_element(By.XPATH, \
+                        # '/html/body/div[position() = 22 or position() = 23]')
+                        '/html/body/div[23]')
+                        print("222pop up detected.")
+                        print("hidden_div_1: ", hidden_div_1)
+                        print("Chrome_driver.current_url.find(checkout): ", Chrome_driver.current_url)
+                        return Chrome_driver, False
+                    except:
+                        print('hrer!!!222')
+                        pass

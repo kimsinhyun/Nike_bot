@@ -1,17 +1,18 @@
-from asyncio import wait_for
-from pymysql import NULL
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import ActionChains
 
-from wait_size_elements_ko_kr import wait_size_elements_ko_kr
-from wait_size_elements_launch import wait_size_elements_launch
-from select_size_ko_kr import select_size_ko_kr
-from select_size_launch import select_size_launch
-from checking_item_uploaded import checking_item_uploaded
-from detect_progress_div import detect_progress_div
-from check_size_select_success import check_size_select_success
+import os, sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from driver_func.wait_size_elements_ko_kr import wait_size_elements_ko_kr
+from driver_func.wait_size_elements_launch import wait_size_elements_launch
+from driver_func.select_size_ko_kr import select_size_ko_kr
+from driver_func.select_size_launch import select_size_launch
+from driver_func.checking_item_uploaded import checking_item_uploaded
+from driver_func.detect_progress_div import detect_progress_div
+from driver_func.check_size_select_success import check_size_select_success
 
 from time import sleep
 import random
