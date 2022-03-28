@@ -41,13 +41,12 @@ def goto_page(Chrome_driver, link, size, get_size_mode, retry_time):
             Chrome_driver, success = detect_progress_div(Chrome_driver)
 
             #===========================no-access로 갔는지 혹은 "지연 되고 있습니다" or "재고가 없습니다" 일 경우 다시 사이즈 선택으로 재시도============================
-
             if(success == False):
                 print("retry select size")
                 Chrome_driver.get(link)
                 continue
             else:
-                return
+                return Chrome_driver
 
 
     #==============================url에 "launch"가 있을 때 (스니커즈 구매 페이지) 위와 비슷, 설명 생략==============================
