@@ -66,14 +66,12 @@ def thrid_step(driver,user_num, LINK,SIZE,get_size_mode, job_condition="choose_p
             return "choose_size"
         else:
             # 1. 주문 생성 오류 감지 시
-            if(driver.page_source.find("잠시후 주문을") != -1):
-                print("잠시후 주문을")
-                driver.refresh()
-                print("restart third step!!")
-                # sleep(2)
-                continue
+            if(driver.page_source.find("선택한 상품의 재고가 없습니다") != -1):
+                print("선택한 상품의 재고가 없습니다")
+                return "choose_size"
             try:
-                qr_code = WebDriverWait(driver, 10, 0.5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
+                # qr_code = WebDriverWait(driver, 10, 0.5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[17]')))
+                qr_code = driver.find_element(By.XPATH, '/html/body/div[17]')
                 print(user_num, "th 아이디 성공!")
                 return "finish"
             except:

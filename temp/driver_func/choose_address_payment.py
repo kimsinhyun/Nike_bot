@@ -22,6 +22,8 @@ def choose_address(Chrome_driver):
                 print("temp_div loading...")
             continue
     while 1:
+        if((Chrome_driver.current_url.find("no-access")!=-1) or (Chrome_driver.current_url.find("singleship")!=-1)):
+            break
         try:
             next_stage = Chrome_driver.find_element(By.XPATH, '//*[@id="btn-next"]')
             print("address next_stage")
