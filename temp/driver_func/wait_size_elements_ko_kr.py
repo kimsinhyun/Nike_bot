@@ -9,7 +9,8 @@ def wait_size_elements_ko_kr(Chrome_driver,link, retry_time):
     while 1:
         # print("waitting for size list")
         size_elements =Chrome_driver.find_elements(By.XPATH, \
-            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[2]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
+            '/html/body/section/section/section/article/article[2]/div/div[4]/div/div[*]/form/div[2]/div[2]/div[*]/div/span[not(@disabled)]')
+            # /html/body/section/section/section/article/article[2]/div/div[4]/div/div[3]/form/div[2]/div[2]/div[1]/div/span[7]
         #사이즈 리스트가 로딩 됐으면 elements 리턴 후 사이즈 선택 문구
         if len(size_elements) > 0:
             print("start choose size")

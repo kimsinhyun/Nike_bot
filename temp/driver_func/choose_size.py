@@ -70,5 +70,5 @@ def goto_page(Chrome_driver, link, size, get_size_mode, retry_time):
                 Chrome_driver.get(link)
                 continue
             else:
-                return
+                return Chrome_driver
         
