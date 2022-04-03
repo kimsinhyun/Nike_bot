@@ -21,9 +21,10 @@ warnings.filterwarnings(action='ignore')
 
 user_info = pd.read_csv('info.csv')
 user_num = len(user_info)
+check_ip = input("ip 확인 (건너뛰기: 'press any key' ; 확인하기: 'enter y or yes')")
 input_hour = input("set hour: ")
 input_min = input("set min: ")
-check_ip = input("ip 확인 (건너뛰기: 'press any key' ; 확인하기: 'enter y or yes')")
+retry_time = int(input("set retry time(second): "))
 
 
 
@@ -48,6 +49,9 @@ def init(user_num):
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
      
+     driverinstance.set_window_size(900, 600)
+     # driverinstance.set_window_size(480, 320)
+
      time_trigger(input_hour, input_min, user_num)
 
      job_condition = "choose_size"
@@ -56,7 +60,7 @@ def init(user_num):
                #첫 시도는 희망하는 사이즈로 선택
                get_size_mode = "select_size"
                #first_step -> 사이즈 서택 페이지, 성공하면 choose_address를 return 받아서 다음 스텝으로 넘어간다.
-               job_condition = first_step(driverinstance, LINK, SIZE, get_size_mode, job_condition)
+               job_condition = first_step(driverinstance, LINK, SIZE, get_size_mode, retry_time,job_condition)
 
           if(job_condition=="choose address"):
                job_condition = second_step(driverinstance,job_condition)

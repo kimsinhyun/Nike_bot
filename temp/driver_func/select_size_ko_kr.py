@@ -32,12 +32,12 @@ def select_size_ko_kr(Chrome_driver, size_elements, size):
         size_element = size_elements[random_size]
     # action.move_to_element(size_element).click().perform()
     size_element.click()
-    sleep(0.1)
+    sleep(0.5)
     #너무 빨라서 사이즈 클릭이 잘 안됐을 경우 다시 한 번 더 클릭
     if(size_element.get_attribute("class") != "selected"):
         # action.move_to_element(size_element).click().perform()
         size_element.click()
-        sleep(0.1)
+        sleep(0.5)
     purchase_btn =  wait.until(EC.presence_of_element_located((By.XPATH,  '//*[@id="btn-buy"]/span')))
     # action.move_to_element(purchase_btn).click().perform()
     purchase_btn.click()

@@ -63,7 +63,8 @@ def choose_payment(Chrome_driver):
             sleep(0.1)
             action.move_to_element(terms_of_conditions).click().perform()
             #----------------------------------------------결제하기 버튼----------------------------------------------
-            complete_purchase = Chrome_driver.find_element(By.XPATH,'//*[@id="complete_checkout"]/button')
+            complete_purchase = WebDriverWait(Chrome_driver, 2,0.1).until(EC.element_to_be_clickable((By.XPATH, \
+            '//*[@id="complete_checkout"]/button')))
             sleep(0.1)
             action.move_to_element(complete_purchase).click().perform()
             #만약 너무 빨라서 결제하기 버튼이 클릭이 안됐으면 다시 한 번 더 클릭
@@ -72,7 +73,7 @@ def choose_payment(Chrome_driver):
             #     action.move_to_element(complete_purchase).click().perform()
 
             #한 번 더 클릭!
-            sleep(0.5)
+            sleep(0.7)
             try:
                 action.move_to_element(complete_purchase).click().perform()
             except:

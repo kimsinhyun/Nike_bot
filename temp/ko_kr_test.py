@@ -43,6 +43,8 @@ def init(user_num):
      if(check_logged_in(driverinstance,user_num) == False):
           login(driverinstance,ID,PW, user_num)
 
+     driverinstance.set_window_size(900, 600)
+
      return driverinstance
 
 def start_ko_kr(user_num, ko_kr_link, driverinstance):
