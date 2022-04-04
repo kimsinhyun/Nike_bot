@@ -31,13 +31,16 @@ def goto_page(Chrome_driver, link, size, get_size_mode, retry_time):
         Chrome_driver = checking_item_uploaded(Chrome_driver, link)
 
         #==========================최대 100번 재시도==================
-        for i in range(100):
+        while 1:
             #=======================사이즈 element 들이 활성화 될 때까지 대기 후 size elements return==============================
             Chrome_driver, size_elements = wait_size_elements_ko_kr(Chrome_driver, link, retry_time)
 
             #======================= 사이즈 선택 ============================
-            Chrome_driver = select_size_ko_kr(Chrome_driver, size_elements, size)
-
+            try:
+                Chrome_driver = select_size_ko_kr(Chrome_driver, size_elements, size)
+            except:
+                Chrome_driver.get(link)
+                continue
             #===========================우선 처리 중이라는 div가 끝날 때까지 기다리거나 popup 및 no-access 감지============================
             Chrome_driver, success = detect_progress_div(Chrome_driver)
 
@@ -56,12 +59,16 @@ def goto_page(Chrome_driver, link, size, get_size_mode, retry_time):
         Chrome_driver = checking_item_uploaded(Chrome_driver, link)
         #----------------------아직 발매가 시작 안됐을 때--------------------
         action = ActionChains(Chrome_driver)
-        for i in range(100):
+        while 1:
             #=======================구매 버튼이 활성화 될 때까지 대기 후 size elements return==============================
             Chrome_driver, size_select_box, size_elements = wait_size_elements_launch(Chrome_driver, link, retry_time)
 
             #======================= 사이즈 선택 ============================
-            Chrome_driver = select_size_launch(Chrome_driver, size_select_box, size_elements, size)
+            try:
+                Chrome_driver = select_size_launch(Chrome_driver, size_select_box, size_elements, size)
+            except:
+                Chrome_driver.get(link)
+                continue
 
             #===========================우선 처리 중이라는 div가 끝날 때까지 기다리거나 popup 및 no-access 감지============================
             Chrome_driver, success = detect_progress_div(Chrome_driver)
